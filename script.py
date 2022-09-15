@@ -11,6 +11,7 @@ import textwrap
 from tkinter.filedialog import askopenfilename
 
 from utils.outputs import print_headers
+from utils.splits import split_df
 
 tmp_dir = 'tmp'
 files = [
@@ -19,6 +20,7 @@ files = [
     'risk',
     'vulns_per_host',
     'vulns_summary',
+    'av-results-tmp',
     'av-results',
 ]
 
@@ -57,7 +59,6 @@ def split_file(filepath):
                                 files[empty_lines])), 'w'
                     ) as f:
                         f.write(''.join(buffer))
-                    print('[*] ' + ''.join(buffer))
                     buffer = []
                     empty_lines += 1
 
@@ -65,20 +66,19 @@ def split_file(filepath):
                 mid_buffer = clear_line(buffer, line, mid_buffer)
 
             if empty_lines == 5:
+                buffer = []
+                mid_buffer = str()
                 vulns_table = True
         else:
-            buffer = []
-            if not line.strip():
-                continue
-            print('[!] ' + line)
-            # Remove jump lines between " and "
-
+            buffer.append(line)
 
     with open(
             os.path.join(tmp_dir, 'file_{}.csv'.format(
-                files[-1])), 'w'
+                files[-2])), 'w'
     ) as f:
         f.write(''.join(buffer))
+
+    split_df(os.path.join(tmp_dir, 'file_{}.csv'.format(files[-2])))
 
     return True
 
