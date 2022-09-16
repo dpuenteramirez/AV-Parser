@@ -315,6 +315,8 @@ $RECYCLE.BIN/
 # Temporary files
 tmp/
 temp/
+*tmp*
+*temp*
 
 # Data
 data/
