@@ -1,20 +1,39 @@
-.. AV-Parser documentation master file, created by
-   sphinx-quickstart on Fri Oct  7 10:55:35 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+AV-Parser
+========
 
-Welcome to AV-Parser's documentation!
-=====================================
+This documentation is being built.
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+Look how easy it is to use:
+
+    import AVParser
 
 
+Features
+--------
 
-Indices and tables
-==================
+- Be awesome
+- Make things faster
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Installation
+------------
+
+Install AV-Parser by running:
+
+    install TBD
+
+Contribute
+----------
+
+- Issue Tracker: https://github.com/dpuenteramirez/AV-Parser/issues
+- Source Code: https://github.com/dpuenteramirez/AV-Parser/
+
+Support
+-------
+
+If you are having issues, please let us know.
+We have a mailing list located at: TBD
+
+License
+-------
+
+The project is licensed under the BSD license.
