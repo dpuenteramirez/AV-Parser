@@ -28,12 +28,18 @@ def parser(path, sep=","):
     """
     df = pd.read_csv(path, sep=sep)
 
-    df = mapping_df(
-        df,
-        v.kiuwan.vuln_parse_columns,
-        ["Priority", "Software characteristic"],
-        [v.kiuwan.priority_map, v.kiuwan.software_characteristic_map],
-    )
+    try:
+        df = mapping_df(
+            df,
+            v.kiuwan.vuln_parse_columns,
+            ['Priority',
+             'Software characteristic'],
+            [v.kiuwan.priority_map,
+             v.kiuwan.software_characteristic_map])
+    except KeyError:
+        v.log.failure('Format not recognized. Please check the file format '
+                      'and/or the input parametrization.')
+        exit(1)
 
     df.columns = v.kiuwan.vuln_excel_columns[:-1]
 

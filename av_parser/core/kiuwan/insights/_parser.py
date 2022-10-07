@@ -28,7 +28,11 @@ def parser(path, sep=","):
         'License risk'
 
     """
-    with open(path, "r") as f:
+
+    if '.csv' not in path:
+        v.log.error('The file must be a csv file.')
+
+    with open(path, 'r') as f:
         columns = f.readline()
         n_columns = columns.count(sep)
         columns = [c.lstrip() for c in columns.strip().split(sep)]
@@ -36,12 +40,18 @@ def parser(path, sep=","):
     cleaned_lines = _cleanup(path, n_columns, sep)
     df = pd.DataFrame(cleaned_lines, columns=columns)
 
-    df = mapping_df(
-        df,
-        v.kiuwan.insights_parse_columns,
-        ["Security risk", "Obsolescence risk", "License risk"],
-        [v.kiuwan.insights_map] * 3,
-    )
+    try:
+        df = mapping_df(
+            df,
+            v.kiuwan.insights_parse_columns,
+            ['Security risk',
+             'Obsolescence risk',
+             'License risk'],
+            [v.kiuwan.insights_map] * 3)
+    except KeyError:
+        v.log.failure('Format not recognized. Please check the file format '
+                      'and/or the input parametrization.')
+        exit(1)
 
     df["#Vulnerabilities"] = df["#Vulnerabilities"].astype(int)
 
@@ -70,7 +80,11 @@ def _cleanup(path, n_columns, sep):
 
     """
     cleaned_lines = list()
-    with open(path, "r") as f:
+
+    if '.csv' not in path:
+        v.log.error('The file must be a csv file.')
+
+    with open(path, 'r') as f:
         lines = f.readlines()
 
         for _, line in enumerate(lines[1:]):
