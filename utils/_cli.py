@@ -31,6 +31,7 @@ def parse_args(parser, args):
 
     if args.gui:
         base_file = askopenfilename()
+        args.file = base_file
         if not exists(base_file):
             v.log.failure('File not found.\nExiting...')
             exit(1)

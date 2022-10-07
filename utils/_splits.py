@@ -13,29 +13,38 @@ re_ipv4 = re.compile(r"(\"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\",)")
 
 
 def split_file(filepath):
-    """
-    Split the file in CSVs in order to be parsed more easily.
-    :param filepath: Path to the file
-    :return: Boolean
+    """It splits the file into
+    six files, the first five are INFO tables and the last one is the vulns
+    table
+
+    Parameters
+    ----------
+    filepath
+        The path to the file to be split.
+
+    Returns
+    -------
+        True
+
     """
     p_split = v.log.progress('Splitting file')
     f = open(filepath, 'r')
     empty_lines = 0
 
-    buffer = []
+    buffer_ = []
     mid_buffer = str()
     vulns_table = False
     for line in f:
         if not vulns_table:
             if not line.strip():
-                if len(buffer) > 0:
+                if len(buffer_) > 0:
                     with open(
                             os.path.join(v.temp_dir,
                                          v.str['tmp_file_format'].format(
                                              v.files[empty_lines])), 'w'
                     ) as f:
-                        f.write(''.join(buffer))
-                    buffer = []
+                        f.write(''.join(buffer_))
+                    buffer_ = []
                     empty_lines += 1
                     v.log.debug(
                         v.str['file_created'].format(v.files[empty_lines])
@@ -45,20 +54,20 @@ def split_file(filepath):
                     )
 
             else:
-                mid_buffer = clear_line(buffer, line, mid_buffer)
+                mid_buffer = clear_line(buffer_, line, mid_buffer)
 
             if empty_lines == 5:
-                buffer = []
+                buffer_ = []
                 mid_buffer = str()
                 vulns_table = True
         else:
-            buffer.append(line)
+            buffer_.append(line)
 
     with open(
             os.path.join(v.temp_dir, v.str['tmp_file_format'].format(
                 v.files[-2])), 'w'
     ) as f:
-        f.write(''.join(buffer))
+        f.write(''.join(buffer_))
 
     p_split.status('Creating DataFrame with vulns')
     split_df(os.path.join(v.temp_dir,
@@ -82,11 +91,11 @@ def clear_line(buffer, line, mid_buffer):
 
 
 def split_df(filepath):
-    file = open(filepath, 'r')
+    file_ = open(filepath, 'r')
 
-    file_r = file.read()
+    file_r = file_.read()
     r_newlines = "".join(file_r.splitlines())
-    file.close()
+    file_.close()
     chunks = re.split(re_ipv4, r_newlines)
     tmp = []
     str_tmp = ''
