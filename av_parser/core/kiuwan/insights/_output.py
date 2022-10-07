@@ -7,11 +7,10 @@
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import excel_col_format, \
-    audit_company_and_width
+from av_parser.core.kiuwan.common import audit_company_and_width, excel_col_format
 
 
-def excel(df, path, sheet_name='Componentes'):
+def excel(df, path, sheet_name="Componentes"):
     """It takes a dataframe,
     writes it to an Excel file, and formats the Excel file
 
@@ -25,34 +24,37 @@ def excel(df, path, sheet_name='Componentes'):
         The name of the sheet to be created in the Excel file.
 
     """
-    writer = pd.ExcelWriter(path, engine='xlsxwriter')
-    df.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
+    writer = pd.ExcelWriter(path, engine="xlsxwriter")
+    df.to_excel(writer,
+                sheet_name=sheet_name,
+                index=False,
+                header=False,
                 startrow=v.offset)
 
     workbook = writer.book
     worksheet = writer.sheets[sheet_name]
 
     cell_format_center = workbook.add_format()
-    cell_format_center.set_align('center')
-    cell_format_center.set_align('vcenter')
+    cell_format_center.set_align("center")
+    cell_format_center.set_align("vcenter")
 
     cell_format_left = workbook.add_format()
-    cell_format_left.set_align('left')
-    cell_format_left.set_align('vcenter')
+    cell_format_left.set_align("left")
+    cell_format_left.set_align("vcenter")
 
-    worksheet.set_column('B:D', None, cell_format_center)
-    worksheet.set_column('A:A', None, cell_format_left)
-    worksheet.set_column('E:L', None, cell_format_left)
+    worksheet.set_column("B:D", None, cell_format_center)
+    worksheet.set_column("A:A", None, cell_format_left)
+    worksheet.set_column("E:L", None, cell_format_left)
 
     text_colors = {
-        'Alto': '#DD7E6B',
-        'Medio': '#F9CB9C',
-        'Bajo': '#FFE598',
-        'Ninguno': '#B7D7A8',
-        'Desconocido': '#FFFFFF'
+        "Alto": "#DD7E6B",
+        "Medio": "#F9CB9C",
+        "Bajo": "#FFE598",
+        "Ninguno": "#B7D7A8",
+        "Desconocido": "#FFFFFF",
     }
 
-    for letter in ['B', 'C', 'D']:
+    for letter in ["B", "C", "D"]:
         for text, color in text_colors.items():
             excel_col_format(df, workbook, worksheet, color, text, letter)
 

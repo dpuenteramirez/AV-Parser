@@ -10,7 +10,7 @@ import variables as v
 from av_parser.core.kiuwan.common import mapping_df
 
 
-def parser(path, sep=','):
+def parser(path, sep=","):
     """It reads in a CSV file, maps the values of two columns to new values, and
     renames the columns
 
@@ -31,10 +31,9 @@ def parser(path, sep=','):
     df = mapping_df(
         df,
         v.kiuwan.vuln_parse_columns,
-        ['Priority',
-         'Software characteristic'],
-        [v.kiuwan.priority_map,
-         v.kiuwan.software_characteristic_map])
+        ["Priority", "Software characteristic"],
+        [v.kiuwan.priority_map, v.kiuwan.software_characteristic_map],
+    )
 
     df.columns = v.kiuwan.vuln_excel_columns[:-1]
 
