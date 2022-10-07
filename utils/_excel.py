@@ -4,7 +4,6 @@
 # @Author:      d3x3r
 # @Time:        16/9/22 18:11
 
-import os
 import openpyxl as xl
 import variables as v
 
