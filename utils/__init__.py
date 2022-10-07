@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    __init__.py.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        15/9/22 11:43
 
 from ._excel import (control_excel_creation)

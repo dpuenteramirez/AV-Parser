@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    __init__.py.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        6/10/22 16:28
 
 import variables as v

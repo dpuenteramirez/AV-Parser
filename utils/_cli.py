@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    _cli.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        16/9/22 11:32
 import os
 import sys

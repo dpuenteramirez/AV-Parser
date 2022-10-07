@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    _splits.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        15/9/22 18:23
 
 import variables as v

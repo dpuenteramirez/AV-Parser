@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    _excel.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        16/9/22 18:11
 
 import os

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    _control.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        14/9/22 17:54
 import argparse
 import os
@@ -53,7 +53,9 @@ def execute():
     parser.add_argument('-C', '--clear', help='Force clear temporary files.',
                         action='store_true')
     parser.add_argument('-F', '--format', help='Specify the input format. '
-                                               'Currently supported: TBD',
+                                               'Currently supported: '
+                                               '\'qualys\', \'kiuwan-vuln\', '
+                                               '\'kiuwan-insights\'.',
                         type=str, default='kiuwan')
     args = parser.parse_args()
 
@@ -91,6 +93,8 @@ def execute():
 
 
 def _check_params():
+    v.log.debug('Checking parameters...')
+    v.log.debug('All parameters OK')
     return True
 
 

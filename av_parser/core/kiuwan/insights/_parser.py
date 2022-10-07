@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    _parser.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        6/10/22 11:20
 
 import pandas as pd
