@@ -320,3 +320,4 @@ temp/
 
 # Data
 data/
+*.xls;xlsx;
