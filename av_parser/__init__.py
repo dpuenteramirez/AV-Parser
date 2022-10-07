@@ -17,6 +17,7 @@ __all__ = ["execute", "create_runtime"]
 
 
 def create_runtime():
+    """It creates the runtime environment for the script."""
     v.start()
     v.temp_dir = tempfile.mkdtemp()
     v.log = log

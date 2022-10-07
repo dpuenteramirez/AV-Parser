@@ -22,10 +22,7 @@ signal.signal(signal.SIGINT, utils.def_handler)
 
 
 def _create_tmp_dir():
-    """
-    Create a temporary directory
-    :return: None
-    """
+    """It creates a temporary directory if it doesn't exist already."""
     try:
         os.mkdir(v.temp_dir)
         log.debug('Temporary directory created')
@@ -35,10 +32,10 @@ def _create_tmp_dir():
 
 
 def execute():
-    """
-    Control flow of the program.
+    """It parses the command line arguments, creates a temporary directory,
+    checks the parameters, and then calls the appropriate functions to parse
+    the input file and create the output file.
 
-    :return: None
     """
     parser = argparse.ArgumentParser(description='Vulnerability Analysis.')
     parser.add_argument('-f', '--file', type=str, help=textwrap.dedent('''\
@@ -98,6 +95,10 @@ def _check_params():
 
 
 def _input_base_data():
+    """It asks the user for the company code, component, year and starting
+    reference number.
+
+    """
     if not _check_company_file():
         while len(v.av_data.company) != 3:
             company = input("Company Cod (3 chars): ")
@@ -125,6 +126,14 @@ def _input_base_data():
 
 
 def _check_company_file():
+    """It checks if the company file exists, if it does, it loads the data
+    into the variables
+
+    Returns
+    -------
+        A boolean value.
+
+    """
     v.log.info('Looking for company file...')
     required_columns = ['company cod', 'component', 'year', 'starting id']
 

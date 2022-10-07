@@ -8,6 +8,28 @@ import variables as v
 
 
 def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
+    """It takes a dataframe, a list of columns to parse, a list of columns to
+    map, and a list of dictionaries to map the columns to, and returns a
+    dataframe with the columns mapped
+
+    Parameters
+    ----------
+    df
+        the dataframe to be mapped
+    parse_columns
+        the columns that you want to keep in the final dataframe
+    columns_to_map
+        a list of columns to map
+    mapping_dict
+        a list of dictionaries, each dictionary is a mapping for a column
+
+    Returns
+    -------
+        A dataframe with the columns specified in parse_columns, with the
+        columns specified in columns_to_map mapped to the values in the
+        mapping_dict.
+
+    """
     df = df.filter(items=parse_columns, axis=1)
 
     ids = ['COD-{}-{}-{}'.format(
@@ -25,6 +47,29 @@ def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
 
 def excel_col_format(df, workbook, worksheet, bg_color, criteria,
                      column_letter, bold=True):
+    """This function takes a dataframe, workbook, worksheet, background color,
+    criteria, and column letter as inputs and formats the column letter in the
+    worksheet with the background color and bold formatting
+    if the criteria is met
+
+    Parameters
+    ----------
+    df
+        the dataframe you're working with
+    workbook
+        the workbook object
+    worksheet
+        the worksheet you're working with
+    bg_color
+        the background color of the cell
+    criteria
+        the criteria to be met for the formatting to be applied
+    column_letter
+        The column letter of the column you want to format.
+    bold, optional
+        True/False
+
+    """
     formatting = workbook.add_format({
         'bold': bold,
         'bg_color': bg_color,
@@ -41,6 +86,25 @@ def excel_col_format(df, workbook, worksheet, bg_color, criteria,
 
 def audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
                             header):
+    """It writes the summary information of the audit, adds a table with the
+     headers, and adjusts the column width
+
+    Parameters
+    ----------
+    df
+        The dataframe to be written to Excel.
+    sheet_name
+        The name of the Excel sheet.
+    workbook
+        The workbook object.
+    worksheet
+        The worksheet object.
+    writer
+        the ExcelWriter object
+    header
+        list of column names
+
+    """
     summary_info_format = workbook.add_format({'bold': True,
                                                'bg_color': '#79A353'})
     summary_values_format = workbook.add_format({'bg_color': '#ACF06E'})
@@ -66,6 +130,23 @@ def audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
 
 
 def _adjust_column_width(df, sheet_name, writer):
+    """For each column in the dataframe, find the length of the longest string
+    in the column, and set the column width to that length plus 10
+
+    Parameters
+    ----------
+    df
+        The dataframe you want to export
+    sheet_name
+        The name of the Excel sheet.
+    writer
+        the ExcelWriter object
+
+    Returns
+    -------
+        The writer object is being returned.
+
+    """
     for column in df:
         column_length = max(df[column].astype(str).map(len).max(),
                             len(column)) + 10

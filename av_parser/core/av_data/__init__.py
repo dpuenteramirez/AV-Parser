@@ -17,6 +17,16 @@ class AVData:
     version = '1.0'
 
     def set_year(self, year):
+        """If the year is a 4-digit number, set the year to that number. If
+        the year is a 2-digit number, set the year to 20 plus that number.
+        Otherwise, set the year to the current year.
+
+        Parameters
+        ----------
+        year
+            The year of the data you want to download.
+
+        """
         if len(str(year)) == 4:
             self.year = year
         elif len(str(year)) == 2:

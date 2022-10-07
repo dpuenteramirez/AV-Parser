@@ -12,6 +12,19 @@ from av_parser.core.kiuwan.common import excel_col_format, \
 
 
 def excel(df, path, sheet_name='Componentes'):
+    """It takes a dataframe,
+    writes it to an Excel file, and formats the Excel file
+
+    Parameters
+    ----------
+    df
+        The dataframe to be written to excel
+    path
+        the path to the Excel file
+    sheet_name, optional
+        The name of the sheet to be created in the Excel file.
+
+    """
     writer = pd.ExcelWriter(path, engine='xlsxwriter')
     df.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
                 startrow=v.offset)

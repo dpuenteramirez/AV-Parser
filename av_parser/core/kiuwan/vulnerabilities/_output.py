@@ -12,6 +12,19 @@ from av_parser.core.kiuwan.common import excel_col_format, \
 
 
 def excel(df, path, sheet_name='Vulnerabilidades del código'):
+    """It creates an Excel file
+    with the vulnerabilities dataframe
+
+    Parameters
+    ----------
+    df
+        The dataframe to be written to the Excel file.
+    path
+        The path to the Excel file.
+    sheet_name, optional
+        The name of the sheet which will contain the data.
+
+    """
     writer = pd.ExcelWriter(path, engine='xlsxwriter')
     df.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
                 startrow=v.offset)

@@ -11,6 +11,23 @@ from av_parser.core.kiuwan.common import mapping_df
 
 
 def parser(path, sep=','):
+    """It reads the file, cleans it up, and then maps the columns to the
+    correct values
+
+    Parameters
+    ----------
+    path
+        the path to the file to parse
+    sep, optional
+        the separator used in the file.
+
+    Returns
+    -------
+        A dataframe with the columns:
+        - 'File', '#Vulnerabilities', 'Security risk', 'Obsolescence risk',
+        'License risk'
+
+    """
     with open(path, 'r') as f:
         columns = f.readline()
         n_columns = columns.count(sep)

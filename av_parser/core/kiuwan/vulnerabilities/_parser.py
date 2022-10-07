@@ -11,15 +11,20 @@ from av_parser.core.kiuwan.common import mapping_df
 
 
 def parser(path, sep=','):
-    """
-    It takes a CSV file, filters it to only the columns we want, adds an ID column,
-    maps the Priority and Software characteristic columns to the values Kiuwan
-    wants, and renames the columns to the names Kiuwan wants
+    """It reads in a CSV file, maps the values of two columns to new values, and
+    renames the columns
 
-    :param path: the path to the file to be parsed
-    :param sep: the separator used in the csv file, defaults to , (optional)
-    :return: A dataframe with the columns and values that are needed for the Kiuwan
-    report.
+    Parameters
+    ----------
+    path
+        the path to the CSV file
+    sep, optional
+        the separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe with the columns renamed to match the vuln_excel_columns
+
     """
     df = pd.read_csv(path, sep=sep)
 
