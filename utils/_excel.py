@@ -33,16 +33,6 @@ def _create_excel():
 def _av_results(wb):
     """
     Create the AV-Results sheet.
+
+    #TODO
     """
-    ws = wb.create_sheet('AV-Results')
-    info = []
-    with open(os.path.join(v.temp_dir, v.str['tmp_file_format'].format(
-                v.files[0])), 'r') as f:
-        for line in f:
-            info.append(line.strip().split(','))
-
-
-
-
-
-

@@ -6,9 +6,7 @@
 
 from av_parser import create_runtime, execute
 
-"""
-Main, run application.
-"""
+
 if __name__ == "__main__":
     create_runtime()
     execute()

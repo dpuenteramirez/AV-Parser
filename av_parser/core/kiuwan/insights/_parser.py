@@ -74,7 +74,7 @@ def _cleanup(path, n_columns, sep):
     with open(path, 'r') as f:
         lines = f.readlines()
 
-        for i, line in enumerate(lines[1:]):
+        for _, line in enumerate(lines[1:]):
             line = line.strip()
 
             if _n_line_seps(line, sep) == n_columns:

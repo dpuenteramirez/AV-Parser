@@ -85,6 +85,10 @@ def execute():
             df = kiuwan_insights_parser(args.file)
             kiuwan_insights_excel(df, v.output)
 
+        if args.format == 'kiuwan-insights-full':
+            df = kiuwan_insights_parser(args.file)
+            kiuwan_insights_excel(df, v.output)
+
     if args.clear:
         v.log.info('Clearing temporary files...')
         for f in os.listdir(v.temp_dir):
