@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # @Filename:    __init__.py.py
-# @Author:      Daniel Puente Ramírez
+# @Author:      d3x3r
 # @Time:        15/9/22 11:43
 
-from ._excel import (create_excel)
+from ._excel import (control_excel_creation)
 from ._cli import (def_handler, parse_args, print_headers)
 from ._splits import (split_file)
 
 __all__ = [
-    'create_excel',
+    'control_excel_creation',
     'def_handler',
     'parse_args',
     'print_headers',
