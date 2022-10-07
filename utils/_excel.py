@@ -5,6 +5,7 @@
 # @Time:        16/9/22 18:11
 
 import openpyxl as xl
+
 import variables as v
 
 
@@ -21,12 +22,12 @@ def _create_excel():
     """
     wb = xl.Workbook()
     ws = wb.active
-    ws.title = 'AV-Results'
+    ws.title = "AV-Results"
 
     _av_results(wb)
 
     wb.save(v.output)
-    v.log.success(v.str['file_created'].format(v.output))
+    v.log.success(v.str["file_created"].format(v.output))
 
 
 def _av_results(wb):

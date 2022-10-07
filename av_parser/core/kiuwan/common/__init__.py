@@ -32,12 +32,15 @@ def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     """
     df = df.filter(items=parse_columns, axis=1)
 
-    ids = ['COD-{}-{}-{}'.format(
-        v.av_data.company,
-        v.av_data.year,
-        str(int(v.av_data.starting_id) + i).zfill(6)) for i in range(len(df))]
+    ids = [
+        "COD-{}-{}-{}".format(
+            v.av_data.company,
+            v.av_data.year,
+            str(int(v.av_data.starting_id) + i).zfill(6),
+        ) for i in range(len(df))
+    ]
 
-    df.insert(0, 'ID', ids)
+    df.insert(0, "ID", ids)
 
     for index, column in enumerate(columns_to_map):
         df[column] = df[column].map(mapping_dict[index])
@@ -45,8 +48,13 @@ def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     return df
 
 
-def excel_col_format(df, workbook, worksheet, bg_color, criteria,
-                     column_letter, bold=True):
+def excel_col_format(df,
+                     workbook,
+                     worksheet,
+                     bg_color,
+                     criteria,
+                     column_letter,
+                     bold=True):
     """This function takes a dataframe, workbook, worksheet, background color,
     criteria, and column letter as inputs and formats the column letter in the
     worksheet with the background color and bold formatting
@@ -71,16 +79,18 @@ def excel_col_format(df, workbook, worksheet, bg_color, criteria,
 
     """
     formatting = workbook.add_format({
-        'bold': bold,
-        'bg_color': bg_color,
+        "bold": bold,
+        "bg_color": bg_color,
     })
-    worksheet.conditional_format('{}{}:{}{}'.format(
-        column_letter, v.offset, column_letter,
-        len(df) + v.offset), {
-        'type': 'formula',
-        'criteria': '=${}{}="{}"'.format(column_letter, v.offset, criteria),
-        'format': formatting
-    }
+    worksheet.conditional_format(
+        "{}{}:{}{}".format(column_letter, v.offset, column_letter,
+                           len(df) + v.offset),
+        {
+            "type": "formula",
+            "criteria": '=${}{}="{}"'.format(column_letter, v.offset,
+                                             criteria),
+            "format": formatting,
+        },
     )
 
 
@@ -105,28 +115,35 @@ def audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
         list of column names
 
     """
-    summary_info_format = workbook.add_format({'bold': True,
-                                               'bg_color': '#79A353'})
-    summary_values_format = workbook.add_format({'bg_color': '#ACF06E'})
-    worksheet.write('A8', 'Empresa', summary_info_format)
-    worksheet.write('A9', 'Componente', summary_info_format)
-    worksheet.write('A10', 'Empresa auditora', summary_info_format)
-    worksheet.write('A11', 'Fecha auditoría', summary_info_format)
-    worksheet.write('A12', 'Versión', summary_info_format)
-    worksheet.write('B8', v.av_data.company, summary_values_format)
-    worksheet.write('B9', v.av_data.component, summary_values_format)
-    worksheet.write('B10', v.av_data.auditor, summary_values_format)
-    worksheet.write('B11', v.av_data.audit_date, summary_values_format)
-    worksheet.write('B12', v.av_data.version, summary_values_format)
-    headers = [{'header': col} for col in header]
-    worksheet.add_table('A{}:O{}'.format(v.offset, len(df) + v.offset),
-                        {'columns': headers,
-                         'style': 'Table Style Medium 18'
-                         })
+    summary_info_format = workbook.add_format({
+        "bold": True,
+        "bg_color": "#79A353"
+    })
+    summary_values_format = workbook.add_format({"bg_color": "#ACF06E"})
+    worksheet.write("A8", "Empresa", summary_info_format)
+    worksheet.write("A9", "Componente", summary_info_format)
+    worksheet.write("A10", "Empresa auditora", summary_info_format)
+    worksheet.write("A11", "Fecha auditoría", summary_info_format)
+    worksheet.write("A12", "Versión", summary_info_format)
+    worksheet.write("B8", v.av_data.company, summary_values_format)
+    worksheet.write("B9", v.av_data.component, summary_values_format)
+    worksheet.write("B10", v.av_data.auditor, summary_values_format)
+    worksheet.write("B11", v.av_data.audit_date, summary_values_format)
+    worksheet.write("B12", v.av_data.version, summary_values_format)
+    headers = [{"header": col} for col in header]
+    worksheet.add_table(
+        "A{}:O{}".format(v.offset,
+                         len(df) + v.offset),
+        {
+            "columns": headers,
+            "style": "Table Style Medium 18"
+        },
+    )
     _adjust_column_width(df, sheet_name, writer)
-    worksheet.insert_image('A1', 'resources/mnemo_logo.png',
-                           {'x_scale': 0.5,
-                            'y_scale': 0.5})
+    worksheet.insert_image("A1", "resources/mnemo_logo.png", {
+        "x_scale": 0.5,
+        "y_scale": 0.5
+    })
 
 
 def _adjust_column_width(df, sheet_name, writer):

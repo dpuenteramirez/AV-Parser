@@ -6,8 +6,7 @@
 
 
 def start():
-    global root_dir, temp_dir, log, files, str, output, kiuwan, qualys, \
-        av_data, offset
+    global root_dir, temp_dir, log, files, str, output, kiuwan, qualys, av_data, offset
     root_dir = None
     temp_dir = None
     log = None

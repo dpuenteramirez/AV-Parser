@@ -10,7 +10,7 @@ import variables as v
 from av_parser.core.kiuwan.common import mapping_df
 
 
-def parser(path, sep=','):
+def parser(path, sep=","):
     """It reads the file, cleans it up, and then maps the columns to the
     correct values
 
@@ -28,7 +28,11 @@ def parser(path, sep=','):
         'License risk'
 
     """
-    with open(path, 'r') as f:
+
+    if ".csv" not in path:
+        v.log.error("The file must be a csv file.")
+
+    with open(path, "r") as f:
         columns = f.readline()
         n_columns = columns.count(sep)
         columns = [c.lstrip() for c in columns.strip().split(sep)]
@@ -36,15 +40,19 @@ def parser(path, sep=','):
     cleaned_lines = _cleanup(path, n_columns, sep)
     df = pd.DataFrame(cleaned_lines, columns=columns)
 
-    df = mapping_df(
-        df,
-        v.kiuwan.insights_parse_columns,
-        ['Security risk',
-         'Obsolescence risk',
-         'License risk'],
-        [v.kiuwan.insights_map] * 3)
+    try:
+        df = mapping_df(
+            df,
+            v.kiuwan.insights_parse_columns,
+            ["Security risk", "Obsolescence risk", "License risk"],
+            [v.kiuwan.insights_map] * 3,
+        )
+    except KeyError:
+        v.log.failure("Format not recognized. Please check the file format "
+                      "and/or the input parametrization.")
+        exit(1)
 
-    df['#Vulnerabilities'] = df['#Vulnerabilities'].astype(int)
+    df["#Vulnerabilities"] = df["#Vulnerabilities"].astype(int)
 
     df.columns = v.kiuwan.insights_excel_columns
 
@@ -71,7 +79,11 @@ def _cleanup(path, n_columns, sep):
 
     """
     cleaned_lines = list()
-    with open(path, 'r') as f:
+
+    if ".csv" not in path:
+        v.log.error("The file must be a csv file.")
+
+    with open(path, "r") as f:
         lines = f.readlines()
 
         for _, line in enumerate(lines[1:]):
@@ -128,13 +140,13 @@ def _split_line_by_sep_no_quotes(line, sep):
     """
     new_line = list()
     inside_quotes = False
-    text = ''
+    text = ""
     for char in line:
         if char == '"':
             inside_quotes = not inside_quotes
         elif char == sep and not inside_quotes:
             new_line.append(text)
-            text = ''
+            text = ""
         else:
             text += char
 
