@@ -69,7 +69,7 @@ class Kiuwan:
         "Fuentes",
     ]
 
-    insights_parse_columns = [
+    insights_components_parse_columns = [
         "Security risk",
         "Obsolescence risk",
         "License risk",
@@ -90,3 +90,16 @@ class Kiuwan:
         "None": "Ninguno",
         "Unknown": "Desconocido",
     }
+
+    insights_license_parse_columns = [
+        'License',
+        'Component',
+        'Associated by user',
+        'Type',
+        'SPDX code',
+        'URL',
+        'Risk',
+        'Permissions',
+        'Limitations',
+        'Conditions',
+    ]

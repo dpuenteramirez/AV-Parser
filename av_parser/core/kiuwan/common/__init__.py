@@ -7,6 +7,22 @@
 import variables as v
 
 
+def check_csv(path):
+    """It checks if the path is a csv file
+
+    Parameters
+    ----------
+    path
+        The path to the file
+
+    Returns
+    -------
+        True/False
+
+    """
+    return True if path.endswith(".csv") else False
+
+
 def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     """It takes a dataframe, a list of columns to parse, a list of columns to
     map, and a list of dictionaries to map the columns to, and returns a

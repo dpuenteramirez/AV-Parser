@@ -7,7 +7,7 @@
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import mapping_df
+from av_parser.core.kiuwan.common import check_csv, mapping_df
 
 
 def parser(path, sep=","):
@@ -26,6 +26,9 @@ def parser(path, sep=","):
         A dataframe with the columns renamed to match the vuln_excel_columns
 
     """
+
+    check_csv(path)
+
     df = pd.read_csv(path, sep=sep)
 
     try:

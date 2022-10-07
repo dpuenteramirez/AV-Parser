@@ -10,14 +10,14 @@ import variables as v
 from av_parser.core.kiuwan.common import audit_company_and_width, excel_col_format
 
 
-def excel(df, path, sheet_name="Componentes"):
+def excel_components(df, path, sheet_name="Componentes"):
     """It takes a dataframe,
     writes it to an Excel file, and formats the Excel file
 
     Parameters
     ----------
     df
-        The dataframe to be written to excel
+        The dataframe to be written to excel_components
     path
         the path to the Excel file
     sheet_name, optional
@@ -64,3 +64,11 @@ def excel(df, path, sheet_name="Componentes"):
     worksheet.freeze_panes(v.offset, 3)
 
     writer.close()
+
+
+def cli_license(df):
+
+    print("\n\n------------------ Licencias ------------------\n")
+    values = df['Risk'].value_counts(dropna=True)
+    print(f'high: {values["high"]}')
+

@@ -13,8 +13,13 @@ from pwn import log
 
 import utils
 import variables as v
-from av_parser.core.kiuwan.insights import excel as kiuwan_insights_excel
-from av_parser.core.kiuwan.insights import parser as kiuwan_insights_parser
+from av_parser.core.kiuwan.insights import excel_components as kiuwan_insights_excel
+from av_parser.core.kiuwan.insights import cli_license as kiuwan_cli_license
+from av_parser.core.kiuwan.insights import parser_components as kiuwan_parser_components
+from av_parser.core.kiuwan.insights import parser_security as kiuwan_parser_security
+from av_parser.core.kiuwan.insights import parser_license as kiuwan_parser_license
+from av_parser.core.kiuwan.insights import parser_obsolescence as \
+    kiuwan_parser_obsolescence
 from av_parser.core.kiuwan.vulnerabilities import excel as kiuwan_vuln_excel
 from av_parser.core.kiuwan.vulnerabilities import parser as kiuwan_vuln_parser
 
@@ -102,12 +107,16 @@ def execute():
             kiuwan_vuln_excel(df, v.output)
 
         if args.format == "kiuwan-insights":
-            df = kiuwan_insights_parser(args.file)
+            df = kiuwan_parser_components(args.file)
             kiuwan_insights_excel(df, v.output)
 
-        if args.format == "kiuwan-insights-full":
-            df = kiuwan_insights_parser(args.file)
-            kiuwan_insights_excel(df, v.output)
+        if args.format == "kiuwan-insights-security":
+            df = kiuwan_parser_security(args.file)
+            # kiuwan_insights_excel(df, v.output)
+
+        if args.format == "kiuwan-insights-license":
+            df = kiuwan_parser_license(args.file)
+            kiuwan_cli_license(df)
 
     if args.clear:
         v.log.info("Clearing temporary files...")

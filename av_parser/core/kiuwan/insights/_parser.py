@@ -4,13 +4,14 @@
 # @Author:      d3x3r
 # @Time:        6/10/22 11:20
 
+import sys
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import mapping_df
+from av_parser.core.kiuwan.common import check_csv, mapping_df
 
 
-def parser(path, sep=","):
+def parser_components(path, sep=","):
     """It reads the file, cleans it up, and then maps the columns to the
     correct values
 
@@ -29,8 +30,7 @@ def parser(path, sep=","):
 
     """
 
-    if ".csv" not in path:
-        v.log.error("The file must be a csv file.")
+    check_csv(path)
 
     with open(path, "r") as f:
         columns = f.readline()
@@ -43,7 +43,7 @@ def parser(path, sep=","):
     try:
         df = mapping_df(
             df,
-            v.kiuwan.insights_parse_columns,
+            v.kiuwan.insights_components_parse_columns,
             ["Security risk", "Obsolescence risk", "License risk"],
             [v.kiuwan.insights_map] * 3,
         )
@@ -57,6 +57,31 @@ def parser(path, sep=","):
     df.columns = v.kiuwan.insights_excel_columns
 
     return df
+
+
+def parser_security(path, sep=","):
+    pass
+
+
+def parser_obsolescence(path, sep=","):
+    pass
+
+
+def parser_license(path, sep=","):
+
+    check_csv(path)
+
+    df = pd.read_csv(path, sep=sep)
+
+    df = df[['Risk', 'SPDX code', 'Component']]
+
+    options = ['high', 'medium']
+    df = df.loc[df['Risk'].isin(options)]
+
+    return df
+
+def parser_full(path, sep=','):
+    pass
 
 
 def _cleanup(path, n_columns, sep):
@@ -80,8 +105,7 @@ def _cleanup(path, n_columns, sep):
     """
     cleaned_lines = list()
 
-    if ".csv" not in path:
-        v.log.error("The file must be a csv file.")
+    check_csv(path)
 
     with open(path, "r") as f:
         lines = f.readlines()
