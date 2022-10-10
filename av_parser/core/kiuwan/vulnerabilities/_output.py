@@ -25,6 +25,7 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
         The name of the sheet which will contain the data.
 
     """
+    path = path.replace(".xlsx", "_vulns.xlsx")
     writer = pd.ExcelWriter(path, engine="xlsxwriter")
     df.to_excel(writer,
                 sheet_name=sheet_name,

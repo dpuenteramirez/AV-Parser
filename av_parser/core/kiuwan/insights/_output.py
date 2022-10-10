@@ -24,6 +24,8 @@ def excel_components(df, path, sheet_name="Componentes"):
         The name of the sheet to be created in the Excel file.
 
     """
+    path = path.replace(".xlsx", "_components.xlsx")
+
     writer = pd.ExcelWriter(path, engine="xlsxwriter")
     df.to_excel(writer,
                 sheet_name=sheet_name,
@@ -67,8 +69,36 @@ def excel_components(df, path, sheet_name="Componentes"):
 
 
 def cli_license(df):
-
+    try:
+        values = df['Risk'].value_counts(dropna=True)
+    except KeyError:
+        return
     print("\n\n------------------ Licencias ------------------\n")
-    values = df['Risk'].value_counts(dropna=True)
-    print(f'high: {values["high"]}')
+    if "High" in values:
+        print(f'High: {values["high"]}')
+    if "Medium" in values:
+        print(f'Medium: {values["medium"]}')
 
+
+def cli_obsolescence(df):
+    try:
+        values = df['Risk'].value_counts(dropna=True)
+    except KeyError:
+        return
+    print("\n\n------------------ Obsolescencia ------------------\n")
+    values = df['Risk'].value_counts(dropna=True)
+    print(f'High: {values["High"]}')
+    print(f'Medium: {values["Medium"]}')
+
+
+def cli_output(df, values, title):
+    try:
+        risk_values = df['Risk'].value_counts(dropna=True)
+    except KeyError:
+        return
+
+    print(f"\n\n------------------ {title} ------------------\n")
+
+    for value in values:
+        if value in risk_values:
+            print(f'{value}: {risk_values[value]}')

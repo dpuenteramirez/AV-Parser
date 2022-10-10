@@ -43,7 +43,7 @@ def parser_components(path, sep=","):
     try:
         df = mapping_df(
             df,
-            v.kiuwan.insights_components_parse_columns,
+            v.kiuwan.insights_comp_parse_columns,
             ["Security risk", "Obsolescence risk", "License risk"],
             [v.kiuwan.insights_map] * 3,
         )
@@ -60,11 +60,26 @@ def parser_components(path, sep=","):
 
 
 def parser_security(path, sep=","):
-    pass
+    check_csv(path)
+
+    df = pd.read_csv(path, sep=sep)
+
+    # TODO: find usage of this function
+
+    return df
 
 
 def parser_obsolescence(path, sep=","):
-    pass
+    check_csv(path)
+
+    df = pd.read_csv(path, sep=sep)
+
+    df = df[['Risk']]
+
+    options = ['High', 'Medium']
+    df = df.loc[df['Risk'].isin(options)]
+
+    return df
 
 
 def parser_license(path, sep=","):
@@ -79,9 +94,6 @@ def parser_license(path, sep=","):
     df = df.loc[df['Risk'].isin(options)]
 
     return df
-
-def parser_full(path, sep=','):
-    pass
 
 
 def _cleanup(path, n_columns, sep):

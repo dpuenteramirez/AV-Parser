@@ -24,6 +24,28 @@ class Kiuwan:
         "Comentarios del Desarrollador",
     ]
 
+    vulnerabilities_parse_columns = [
+        "Rule code",
+        "Rule",
+        "Priority",
+        "CWE",
+        "Software characteristic",
+        "Vulnerability type",
+        "Language",
+        "Effort",
+        "File",
+        "Line number",
+        "Line text",
+        "Source file",
+        "Source line number",
+        "Source line text",
+        "Muted",
+        "Normative",
+        "Status",
+        "CWE Scope",
+        "Framework",
+    ]
+
     vuln_parse_columns = [
         "CWE",
         "Priority",
@@ -70,6 +92,23 @@ class Kiuwan:
     ]
 
     insights_components_parse_columns = [
+        "Component",
+        "Group",
+        "Version",
+        "Custom",
+        "Filename",
+        "Language",
+        "#Licenses",
+        "Licenses",
+        "#Vulnerabilities",
+        "CVE",
+        "Obsolescence risk",
+        "License risk",
+        "Security risk",
+        " Sources",
+    ]
+
+    insights_comp_parse_columns = [
         "Security risk",
         "Obsolescence risk",
         "License risk",
@@ -92,14 +131,57 @@ class Kiuwan:
     }
 
     insights_license_parse_columns = [
-        'License',
-        'Component',
-        'Associated by user',
-        'Type',
-        'SPDX code',
-        'URL',
-        'Risk',
-        'Permissions',
-        'Limitations',
-        'Conditions',
+        "License",
+        "Component",
+        "Associated by user",
+        "Type",
+        "SPDX code",
+        "URL",
+        "Risk",
+        "Permissions",
+        "Limitations",
+        "Conditions",
+    ]
+
+    insights_obsolescence_parse_columns = [
+        "Component",
+        "Languaje",
+        "Used version",
+        "Custom",
+        "Date",
+        "Last version",
+        "Date.1",
+        "Releases",
+        "Out of date",
+        "Time inactivity",
+        "Obsolescence risk",
+        "Risk",
+    ]
+
+    insights_security_parse_columns = [
+        "CVE",
+        "Private",
+        "CWE",
+        "Last modified",
+        "Exploitability Subscore",
+        "Impact Subscore",
+        "CVSS v2 Base Score",
+        "Description",
+        "Attack vector(V2)",
+        "Acces Complexity(V2)",
+        "Authentication(V2)",
+        "Confidentiality impact(V2)",
+        "Integrity impact(V2)",
+        "Availability impact(V2)",
+        "vector(V2)",
+        "Attack vector(V3)",
+        "Access complexity(V3)",
+        "Privileges Required(V3)",
+        "User Interaction(V3)",
+        "Scope(V3)",
+        "Confidentiality impact(V3)",
+        "Integrity impact(V3)",
+        "Availability impact(V3)",
+        "Component",
+        "Mute",
     ]

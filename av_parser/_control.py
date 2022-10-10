@@ -13,13 +13,19 @@ from pwn import log
 
 import utils
 import variables as v
-from av_parser.core.kiuwan.insights import excel_components as kiuwan_insights_excel
-from av_parser.core.kiuwan.insights import cli_license as kiuwan_cli_license
-from av_parser.core.kiuwan.insights import parser_components as kiuwan_parser_components
-from av_parser.core.kiuwan.insights import parser_security as kiuwan_parser_security
-from av_parser.core.kiuwan.insights import parser_license as kiuwan_parser_license
+from av_parser.core.kiuwan.insights import excel_components as\
+    kiuwan_insights_excel
+from av_parser.core.kiuwan.insights import cli_output as \
+    kiuwan_cli_output
+from av_parser.core.kiuwan.insights import parser_components as \
+    kiuwan_parser_components
+from av_parser.core.kiuwan.insights import parser_security as \
+    kiuwan_parser_security
+from av_parser.core.kiuwan.insights import parser_license as \
+    kiuwan_parser_license
 from av_parser.core.kiuwan.insights import parser_obsolescence as \
     kiuwan_parser_obsolescence
+from av_parser.core.kiuwan.full import parser_full as kiuwan_parser_full
 from av_parser.core.kiuwan.vulnerabilities import excel as kiuwan_vuln_excel
 from av_parser.core.kiuwan.vulnerabilities import parser as kiuwan_vuln_parser
 
@@ -112,11 +118,18 @@ def execute():
 
         if args.format == "kiuwan-insights-security":
             df = kiuwan_parser_security(args.file)
-            # kiuwan_insights_excel(df, v.output)
+            kiuwan_cli_output(df, ['high', 'medium'], 'Seguridad')
 
         if args.format == "kiuwan-insights-license":
             df = kiuwan_parser_license(args.file)
-            kiuwan_cli_license(df)
+            kiuwan_cli_output(df, ['high', 'medium'], 'Licencias')
+
+        if args.format == "kiuwan-insights-obsolescence":
+            df = kiuwan_parser_obsolescence(args.file)
+            kiuwan_cli_output(df, ['High', 'Medium'], 'Obsolescencia')
+
+        if args.format == "kiuwan-full":
+            kiuwan_parser_full(args.file)
 
     if args.clear:
         v.log.info("Clearing temporary files...")
