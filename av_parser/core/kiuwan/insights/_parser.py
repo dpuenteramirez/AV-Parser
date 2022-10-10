@@ -4,7 +4,6 @@
 # @Author:      d3x3r
 # @Time:        6/10/22 11:20
 
-import sys
 import pandas as pd
 
 import variables as v
@@ -83,7 +82,6 @@ def parser_obsolescence(path, sep=","):
 
 
 def parser_license(path, sep=","):
-
     check_csv(path)
 
     df = pd.read_csv(path, sep=sep)

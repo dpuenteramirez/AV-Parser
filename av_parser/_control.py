@@ -13,19 +13,19 @@ from pwn import log
 
 import utils
 import variables as v
-from av_parser.core.kiuwan.insights import excel_components as\
-    kiuwan_insights_excel
+from av_parser.core.kiuwan.full import parser_full as kiuwan_parser_full
 from av_parser.core.kiuwan.insights import cli_output as \
     kiuwan_cli_output
+from av_parser.core.kiuwan.insights import excel_components as \
+    kiuwan_insights_excel
 from av_parser.core.kiuwan.insights import parser_components as \
     kiuwan_parser_components
-from av_parser.core.kiuwan.insights import parser_security as \
-    kiuwan_parser_security
 from av_parser.core.kiuwan.insights import parser_license as \
     kiuwan_parser_license
 from av_parser.core.kiuwan.insights import parser_obsolescence as \
     kiuwan_parser_obsolescence
-from av_parser.core.kiuwan.full import parser_full as kiuwan_parser_full
+from av_parser.core.kiuwan.insights import parser_security as \
+    kiuwan_parser_security
 from av_parser.core.kiuwan.vulnerabilities import excel as kiuwan_vuln_excel
 from av_parser.core.kiuwan.vulnerabilities import parser as kiuwan_vuln_parser
 
@@ -82,9 +82,9 @@ def execute():
         "-F",
         "--format",
         help="Specify the input format. "
-        "Currently supported: "
-        "'qualys', 'kiuwan-vuln', "
-        "'kiuwan-insights'.",
+             "Currently supported: "
+             "'qualys', 'kiuwan-vuln', "
+             "'kiuwan-insights'.",
         type=str,
         default="kiuwan",
     )
@@ -200,9 +200,9 @@ def _check_company_file():
 
         if len(required_columns) == len(
                 company_data.columns) and len(required_columns) == sum([
-                    1 for i, j in zip(required_columns, company_data.columns)
-                    if i == j
-                ]):
+            1 for i, j in zip(required_columns, company_data.columns)
+            if i == j
+        ]):
 
             v.av_data.company = company_data["company cod"][0][:3]
             v.av_data.component = company_data["component"][0]

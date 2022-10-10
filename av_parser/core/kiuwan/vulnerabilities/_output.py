@@ -5,10 +5,12 @@
 # @Time:        5/10/22 14:45
 
 import os
+
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import audit_company_and_width, excel_col_format
+from av_parser.core.kiuwan.common import audit_company_and_width, \
+    excel_col_format
 
 
 def excel(df, path, sheet_name="Vulnerabilidades del código"):

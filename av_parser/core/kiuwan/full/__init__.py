@@ -5,14 +5,15 @@
 # @Time:        10/10/22 16:55
 
 import os
+
+import pandas as pd
+
 import variables as v
-from av_parser.core.kiuwan.vulnerabilities import parser as vuln_parser
-from av_parser.core.kiuwan.vulnerabilities import excel as vuln_excel
 from av_parser.core.kiuwan.insights import parser_components, \
     parser_security, parser_license, parser_obsolescence, excel_components, \
     cli_output
-
-import pandas as pd
+from av_parser.core.kiuwan.vulnerabilities import excel as vuln_excel
+from av_parser.core.kiuwan.vulnerabilities import parser as vuln_parser
 
 
 def parser_full(dir_path, sep=","):
