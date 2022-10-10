@@ -4,6 +4,7 @@
 # @Author:      d3x3r
 # @Time:        5/10/22 11:35
 
+import os
 import pandas as pd
 
 import variables as v
@@ -30,6 +31,14 @@ def parser(path, sep=","):
     check_csv(path)
 
     df = pd.read_csv(path, sep=sep)
+
+    df_vuln_type = df['Vulnerability type'].copy()
+
+    df_vuln_type = df_vuln_type.value_counts()
+    df_vuln_type.to_csv(os.path.join(v.temp_dir, 'vuln_type.csv'),
+                        index=True, header=True)
+    v.log.debug(f"Vulnerability type file created\n\tPath: "
+                f"{os.path.join(v.temp_dir, 'vuln_type.csv')}")
 
     try:
         df = mapping_df(

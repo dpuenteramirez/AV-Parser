@@ -30,7 +30,7 @@ def _create_tmp_dir():
     """It creates a temporary directory if it doesn't exist already."""
     try:
         os.mkdir(v.temp_dir)
-        log.debug("Temporary directory created")
+        log.debug(f"Temporary directory created.\n\tPath: {v.temp_dir}")
     except FileExistsError:
         log.debug("Temporary directory exists already")
     v.log.debug("Temporary directory: {}".format(v.temp_dir))
