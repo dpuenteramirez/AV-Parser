@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-# @Filename:    _splits.py
+# @Filename:    _parser.py
 # @Author:      d3x3r
-# @Time:        15/9/22 18:23
+# @Time:        10/10/22 18:42
 
 import os
 import re
@@ -11,26 +11,13 @@ import pandas as pd
 
 import variables as v
 
+
 re_ipv4 = re.compile(r"(\"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\",)")
 
 
-def split_file(filepath):
-    """It splits the file into
-    six files, the first five are INFO tables and the last one is the vulns
-    table
-
-    Parameters
-    ----------
-    filepath
-        The path to the file to be split.
-
-    Returns
-    -------
-        True
-
-    """
+def parser(path):
     p_split = v.log.progress("Splitting file")
-    f = open(filepath, "r")
+    f = open(path, "r")
     empty_lines = 0
 
     buffer_ = []
@@ -57,7 +44,7 @@ def split_file(filepath):
                         v.files[empty_lines]))
 
             else:
-                mid_buffer = clear_line(buffer_, line, mid_buffer)
+                mid_buffer = _clear_line(buffer_, line, mid_buffer)
 
             if empty_lines == 5:
                 buffer_ = []
@@ -73,13 +60,28 @@ def split_file(filepath):
         f.write("".join(buffer_))
 
     p_split.status("Creating DataFrame with vulns")
-    split_df(
+    _split_df(
         os.path.join(v.temp_dir, v.str["tmp_file_format"].format(v.files[-2])))
+
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
+    df["Severity"] = df["Severity"].map(v.qualys.WAS.map_severity)
+    df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t",
+              index=False)
+
     p_split.success(v.str["file_created"].format(v.files[-1]))
+
+    v.log.success("File split successfully")
+
+    with open(os.path.join(v.temp_dir, v.str["tmp_file_format"].format(
+            v.files[0])), "r") as f:
+        _ = f.readline()
+        line = f.readline()
+        v.av_data.company = line.split(",")[0].replace('"', "")
+
     return True
 
 
-def clear_line(buffer, line, mid_buffer):
+def _clear_line(buffer, line, mid_buffer):
     if line.count('"') % 2 == 0:
         line = line.replace('"', "")
         buffer.append(line)
@@ -92,7 +94,7 @@ def clear_line(buffer, line, mid_buffer):
     return mid_buffer
 
 
-def split_df(filepath):
+def _split_df(filepath):
     file_ = open(filepath, "r")
 
     file_r = file_.read()

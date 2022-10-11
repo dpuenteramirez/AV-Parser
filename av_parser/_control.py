@@ -11,8 +11,12 @@ import textwrap
 import pandas as pd
 from pwn import log
 
-import utils
+from av_parser import utils
 import variables as v
+
+from av_parser.core.qualys.was import parser as qualys_was_parser
+from av_parser.core.qualys.was import excel as qualys_was_excel
+
 from av_parser.core.kiuwan.full import parser_full as kiuwan_parser_full
 from av_parser.core.kiuwan.insights import cli_output as \
     kiuwan_cli_output
@@ -30,6 +34,16 @@ from av_parser.core.kiuwan.vulnerabilities import excel as kiuwan_vuln_excel
 from av_parser.core.kiuwan.vulnerabilities import parser as kiuwan_vuln_parser
 
 signal.signal(signal.SIGINT, utils.def_handler)
+
+
+def _create_output_dir():
+    """It creates the output directory if it doesn't exist already."""
+    try:
+        os.mkdir('output')
+        log.debug(f"Output directory created.\n\tPath: output/")
+    except FileExistsError:
+        log.debug("Output directory exists already")
+    v.log.debug("Output directory: output/")
 
 
 def _create_tmp_dir():
@@ -90,7 +104,8 @@ def execute():
     )
     args = parser.parse_args()
 
-    v.output = args.output
+    _create_output_dir()
+    v.output = os.path.join('output', args.output)
 
     if ".xlsx" not in v.output:
         v.output += ".xlsx"
@@ -104,9 +119,9 @@ def execute():
     if _check_params():
         _input_base_data()
         log.info("Starting analysis...")
-        if args.format == "qualys":
-            utils.split_file(args.file)
-            utils.control_excel_creation()
+        if args.format == "qualys-was":
+            qualys_was_parser(args.file)
+            qualys_was_excel(v.output)
 
         if args.format == "kiuwan-vuln":
             df = kiuwan_vuln_parser(args.file)
@@ -198,11 +213,11 @@ def _check_company_file():
             v.log.info("Company file is not valid. Asking for input...")
             return False
 
-        if len(required_columns) == len(
-                company_data.columns) and len(required_columns) == sum([
-            1 for i, j in zip(required_columns, company_data.columns)
-            if i == j
-        ]):
+        if len(required_columns) == len(company_data.columns) and \
+                len(required_columns) == \
+                sum([1 for i, j in zip(required_columns, company_data.columns)
+                     if i == j
+                     ]):
 
             v.av_data.company = company_data["company cod"][0][:3]
             v.av_data.component = company_data["component"][0]

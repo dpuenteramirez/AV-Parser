@@ -26,8 +26,8 @@ def create_runtime():
         "risk",
         "vulns_per_host",
         "vulns_summary",
-        "av-results-tmp",
-        "av-results",
+        "av_results_tmp",
+        "av_results",
     ]
     v.str = {
         "scan_info": "Scan Information",

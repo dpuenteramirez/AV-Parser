@@ -7,8 +7,8 @@
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import audit_company_and_width, \
-    excel_col_format
+from av_parser.core.kiuwan.common import excel_col_format
+from av_parser.core.common import audit_company_and_width
 
 
 def excel_components(df, path, sheet_name="Componentes"):
@@ -79,17 +79,6 @@ def cli_license(df):
         print(f'High: {values["high"]}')
     if "Medium" in values:
         print(f'Medium: {values["medium"]}')
-
-
-def cli_obsolescence(df):
-    try:
-        values = df['Risk'].value_counts(dropna=True)
-    except KeyError:
-        return
-    print("\n\n------------------ Obsolescencia ------------------\n")
-    values = df['Risk'].value_counts(dropna=True)
-    print(f'High: {values["High"]}')
-    print(f'Medium: {values["Medium"]}')
 
 
 def cli_output(df, values, title):

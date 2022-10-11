@@ -9,8 +9,8 @@ import os
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import audit_company_and_width, \
-    excel_col_format
+from av_parser.core.kiuwan.common import excel_col_format
+from av_parser.core.common._output import audit_company_and_width
 
 
 def excel(df, path, sheet_name="Vulnerabilidades del código"):

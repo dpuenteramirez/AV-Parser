@@ -17,6 +17,7 @@ from av_parser.core.kiuwan.vulnerabilities import parser as vuln_parser
 
 
 def parser_full(dir_path, sep=","):
+    v.log.info("Parsing Kiuwan all available data")
     files = os.listdir(dir_path)
 
     if len(files) == 0:
