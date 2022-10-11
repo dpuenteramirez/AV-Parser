@@ -116,41 +116,45 @@ def execute():
 
     _create_tmp_dir()
 
-    if _check_params():
-        _input_base_data()
-        log.info("Starting analysis...")
-        if args.format == "qualys-was":
-            qualys_was_parser(args.file)
-            qualys_was_excel(v.output)
+    try:
+        if _check_params():
+            _input_base_data()
+            log.info("Starting analysis...")
+            if args.format == "qualys-was":
+                qualys_was_parser(args.file)
+                qualys_was_excel(v.output)
 
-        if args.format == "kiuwan-vuln":
-            df = kiuwan_vuln_parser(args.file)
-            kiuwan_vuln_excel(df, v.output)
+            if args.format == "kiuwan-vulnerabilities":
+                df = kiuwan_vuln_parser(args.file)
+                kiuwan_vuln_excel(df, v.output)
 
-        if args.format == "kiuwan-insights":
-            df = kiuwan_parser_components(args.file)
-            kiuwan_insights_excel(df, v.output)
+            if args.format == "kiuwan-insights-components":
+                df = kiuwan_parser_components(args.file)
+                kiuwan_insights_excel(df, v.output)
 
-        if args.format == "kiuwan-insights-security":
-            df = kiuwan_parser_security(args.file)
-            kiuwan_cli_output(df, ['high', 'medium'], 'Seguridad')
+            if args.format == "kiuwan-insights-security":
+                df = kiuwan_parser_security(args.file)
+                kiuwan_cli_output(df, ['high', 'medium'], 'Seguridad')
 
-        if args.format == "kiuwan-insights-license":
-            df = kiuwan_parser_license(args.file)
-            kiuwan_cli_output(df, ['high', 'medium'], 'Licencias')
+            if args.format == "kiuwan-insights-license":
+                df = kiuwan_parser_license(args.file)
+                kiuwan_cli_output(df, ['high', 'medium'], 'Licencias')
 
-        if args.format == "kiuwan-insights-obsolescence":
-            df = kiuwan_parser_obsolescence(args.file)
-            kiuwan_cli_output(df, ['High', 'Medium'], 'Obsolescencia')
+            if args.format == "kiuwan-insights-obsolescence":
+                df = kiuwan_parser_obsolescence(args.file)
+                kiuwan_cli_output(df, ['High', 'Medium'], 'Obsolescencia')
 
-        if args.format == "kiuwan-full":
-            kiuwan_parser_full(args.file)
+            if args.format == "kiuwan-full":
+                kiuwan_parser_full(args.file)
+    except Exception as e:
+        log.warning(e)
+        log.warning("An error occurred. Please, check the log file.")
 
     if args.clear:
         v.log.info("Clearing temporary files...")
         for f in os.listdir(v.temp_dir):
             os.remove(os.path.join(v.temp_dir, f))
-        v.log.info("Temporary files cleared")
+        v.log.success("Temporary files deleted")
 
 
 def _check_params():

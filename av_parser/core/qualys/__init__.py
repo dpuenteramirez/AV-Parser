@@ -73,5 +73,20 @@ class Qualys:
             "Critical",
         ]
 
+        host_unique_vulns_excel_columns = [
+            "Host",
+            "Nombre",
+            "Critical",
+        ]
+
+        top_5_vulns_columns = [
+            "Title",
+            "Severity",
+        ]
+
+        top_5_vulns_excel_columns = [
+            "Nombre",
+            "Ocurrencias de tipo {}",
+        ]
 
     WAS = WAS()

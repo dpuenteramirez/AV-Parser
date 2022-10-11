@@ -5,11 +5,13 @@
 # @Time:        10/10/22 18:42
 
 import os
+from random import choice
 import string
 import numpy as np
 import pandas as pd
 import variables as v
-from av_parser.core.common import audit_company_and_width, add_table
+from av_parser.core.common import audit_company_and_width, add_table, \
+    adjust_column_width
 
 
 def excel(path):
@@ -27,8 +29,15 @@ def excel(path):
     p_excel.status("Creating Host Severity sheet...")
     _host_severity(writer, "Hosts_Severidad")
 
+    p_excel.status("Creating Host Unique Vulns sheet...")
+    _host_unique_vulns(writer, "Hosts_Vulnerabilidades_Únicas")
+
+    p_excel.status("Creating Top 5 Vulns sheet...")
+    _top_5_vulns(writer, "Top_5_Vulnerabilidades")
+
     writer.close()
 
+    p_excel.success("All Excel sheets have been created successfully")
     v.log.success("Qualys WAS Excel file created successfully")
 
 
@@ -82,6 +91,9 @@ def _id_unique_vulns(writer, sheet_name):
     worksheet = writer.sheets[sheet_name]
 
     add_table(df, v.qualys.WAS.id_unique_vulns_excel_columns, worksheet, 1)
+    df.columns = [''.join(choice(string.ascii_lowercase) for _ in range(5))
+                  for _ in range(len(df.columns))]
+    adjust_column_width(df, sheet_name, writer)
 
 
 def _host_severity(writer, sheet_name):
@@ -113,8 +125,8 @@ def _host_severity(writer, sheet_name):
     workbook = writer.book
     worksheet = writer.sheets[sheet_name]
     add_table(df_host_vulns, v.qualys.WAS.host_severity_excel_columns,
-              worksheet, 1, 'VulnsHost', True,
-              f"=SUM(VulnsHost[[#This Row],["
+              worksheet, 1, 'Table_VulnsHost', True,
+              f"=SUM(Table_VulnsHost[[#This Row],["
               f"{v.qualys.WAS.host_severity_excel_columns[1]}]:["
               f"{v.qualys.WAS.host_severity_excel_columns[-1]}]])")
 
@@ -125,14 +137,61 @@ def _host_severity(writer, sheet_name):
         __top_10_host_severity_chart(workbook, worksheet, sheet_name, severity)
 
     __top_10_host_more_vulns_chart(workbook, worksheet, sheet_name)
+    worksheet.set_column("A:A", 20)
 
 
 def _host_unique_vulns(writer, sheet_name):
-    pass
+    buscar_v1 = "IF(VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2," \
+                "FALSE)<>0,VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2," \
+                "FALSE),\"Not found\")"
+    buscar_v2 = "VLOOKUP(A{},Table_VulnsHost[[Host]:[Critical]],6,FALSE)"
+
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1]+".csv"), sep="\t")
+
+    df = pd.DataFrame(df['IP'].unique())
+
+    df.to_excel(writer, sheet_name=sheet_name, index=False,
+                header=False, startrow=1)
+
+    worksheet = writer.sheets[sheet_name]
+
+    for n_row in range(2, len(df)+2):
+        worksheet.write_formula(f"B{n_row}", buscar_v1.format(n_row, n_row))
+        worksheet.write_formula(f"C{n_row}", buscar_v2.format(n_row))
+
+    add_table(df, v.qualys.WAS.host_unique_vulns_excel_columns, worksheet, 1)
+    df.columns = [''.join(choice(string.ascii_lowercase) for _ in range(5))
+                  for _ in range(len(df.columns))]
+    adjust_column_width(df, sheet_name, writer)
+    worksheet.set_column("B:B", 50)
 
 
 def _top_5_vulns(writer, sheet_name):
-    pass
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1]+".csv"), sep="\t")
+
+    df = df[v.qualys.WAS.top_5_vulns_columns]
+
+    df = df.groupby(["Title", "Severity"]).size().reset_index(name="Count")
+
+    for severity in v.qualys.WAS.map_severity.values():
+        n_severity = df[df["Severity"] == severity]["Count"].sum()
+        if n_severity > 0:
+            df = df[df["Severity"] == severity]
+            df.drop("Severity", axis=1, inplace=True)
+            v.qualys.WAS.top_5_vulns_excel_columns[1] = \
+                v.qualys.WAS.top_5_vulns_excel_columns[1].format(severity)
+            break
+
+    df.sort_values(by="Count", ascending=False, inplace=True)
+
+    df.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
+                startrow=1)
+
+    worksheet = writer.sheets[sheet_name]
+
+    add_table(df, v.qualys.WAS.top_5_vulns_excel_columns, worksheet, 1)
+    adjust_column_width(df, sheet_name, writer)
+    worksheet.set_column("B:B", len(v.qualys.WAS.top_5_vulns_excel_columns[1]))
 
 
 def __distribution_vulns(df, workbook, worksheet):
