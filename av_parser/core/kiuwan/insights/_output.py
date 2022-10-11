@@ -7,8 +7,8 @@
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import excel_col_format
 from av_parser.core.common import audit_company_and_width
+from av_parser.core.kiuwan.common import excel_col_format
 
 
 def excel_components(df, path, sheet_name="Componentes"):
@@ -71,7 +71,7 @@ def excel_components(df, path, sheet_name="Componentes"):
 
 def cli_license(df):
     try:
-        values = df['Risk'].value_counts(dropna=True)
+        values = df["Risk"].value_counts(dropna=True)
     except KeyError:
         return
     print("\n\n------------------ Licencias ------------------\n")
@@ -83,7 +83,7 @@ def cli_license(df):
 
 def cli_output(df, values, title):
     try:
-        risk_values = df['Risk'].value_counts(dropna=True)
+        risk_values = df["Risk"].value_counts(dropna=True)
     except KeyError:
         return
 
@@ -91,4 +91,4 @@ def cli_output(df, values, title):
 
     for value in values:
         if value in risk_values:
-            print(f'{value}: {risk_values[value]}')
+            print(f"{value}: {risk_values[value]}")

@@ -6,7 +6,6 @@
 
 from ._cli import def_handler, parse_args, print_headers
 
-
 __all__ = [
     "def_handler",
     "parse_args",

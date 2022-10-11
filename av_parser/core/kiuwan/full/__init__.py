@@ -9,9 +9,14 @@ import os
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.insights import parser_components, \
-    parser_security, parser_license, parser_obsolescence, excel_components, \
-    cli_output
+from av_parser.core.kiuwan.insights import (
+    cli_output,
+    excel_components,
+    parser_components,
+    parser_license,
+    parser_obsolescence,
+    parser_security,
+)
 from av_parser.core.kiuwan.vulnerabilities import excel as vuln_excel
 from av_parser.core.kiuwan.vulnerabilities import parser as vuln_parser
 
@@ -29,35 +34,36 @@ def parser_full(dir_path, sep=","):
 
             df = pd.read_csv(os.path.join(dir_path, file), sep=sep)
 
-            if _check_lists(df.columns, v.kiuwan.vulnerabilities_parse_columns):
+            if _check_lists(df.columns,
+                            v.kiuwan.vulnerabilities_parse_columns):
                 df = vuln_parser(os.path.join(dir_path, file))
                 vuln_excel(df, v.output)
-                v.log.success(f"File \'{file}\' recognized as vulns")
+                v.log.success(f"File '{file}' recognized as vulns")
 
             if _check_lists(df.columns,
                             v.kiuwan.insights_components_parse_columns):
                 df = parser_components(os.path.join(dir_path, file))
                 excel_components(df, v.output)
-                v.log.success(f"File \'{file}\' parsed as a componentes file")
+                v.log.success(f"File '{file}' parsed as a componentes file")
 
             elif _check_lists(df.columns,
                               v.kiuwan.insights_license_parse_columns):
                 df = parser_license(os.path.join(dir_path, file))
-                cli_output(df, ['high', 'medium'], 'Licencias')
-                v.log.success(f"File \'{file}\' parsed as a license file")
+                cli_output(df, ["high", "medium"], "Licencias")
+                v.log.success(f"File '{file}' parsed as a license file")
 
             elif _check_lists(df.columns,
                               v.kiuwan.insights_obsolescence_parse_columns):
                 df = parser_obsolescence(os.path.join(dir_path, file))
-                cli_output(df, ['High', 'Medium'], 'Obsolescencia')
+                cli_output(df, ["High", "Medium"], "Obsolescencia")
 
-                v.log.success(f"File \'{file}\' parsed as a obsolescence file")
+                v.log.success(f"File '{file}' parsed as a obsolescence file")
 
             elif _check_lists(df.columns,
                               v.kiuwan.insights_security_parse_columns):
                 df = parser_security(os.path.join(dir_path, file))
-                cli_output(df, ['high', 'medium'], 'Seguridad')
-                v.log.success(f"File \'{file}\' parsed as a security file")
+                cli_output(df, ["high", "medium"], "Seguridad")
+                v.log.success(f"File '{file}' parsed as a security file")
 
 
 def _check_lists(list1, list2):

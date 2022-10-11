@@ -11,7 +11,6 @@ import pandas as pd
 
 import variables as v
 
-
 re_ipv4 = re.compile(r"(\"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\",)")
 
 
@@ -65,15 +64,18 @@ def parser(path):
 
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
     df["Severity"] = df["Severity"].map(v.qualys.WAS.map_severity)
-    df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t",
+    df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"),
+              sep="\t",
               index=False)
 
     p_split.success(v.str["file_created"].format(v.files[-1]))
 
     v.log.success("File split successfully")
 
-    with open(os.path.join(v.temp_dir, v.str["tmp_file_format"].format(
-            v.files[0])), "r") as f:
+    with open(
+            os.path.join(v.temp_dir,
+                         v.str["tmp_file_format"].format(v.files[0])),
+            "r") as f:
         _ = f.readline()
         line = f.readline()
         v.av_data.company = line.split(",")[0].replace('"', "")

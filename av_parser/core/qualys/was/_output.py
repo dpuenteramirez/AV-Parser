@@ -5,13 +5,18 @@
 # @Time:        10/10/22 18:42
 
 import os
-from random import choice
 import string
+from random import choice
+
 import numpy as np
 import pandas as pd
+
 import variables as v
-from av_parser.core.common import audit_company_and_width, add_table, \
-    adjust_column_width
+from av_parser.core.common import (
+    add_table,
+    adjust_column_width,
+    audit_company_and_width,
+)
 
 
 def excel(path):
@@ -42,7 +47,7 @@ def excel(path):
 
 
 def _av_results(writer, sheet_name):
-    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1]+".csv"), sep="\t")
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
     df = df[v.qualys.WAS.av_results]
 
@@ -63,14 +68,21 @@ def _av_results(writer, sheet_name):
 
     worksheet.set_column("A:P", 50)
 
-    audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
-                            v.qualys.WAS.av_results_excel_columns, False)
+    audit_company_and_width(
+        df,
+        sheet_name,
+        workbook,
+        worksheet,
+        writer,
+        v.qualys.WAS.av_results_excel_columns,
+        False,
+    )
 
     worksheet.freeze_panes(v.offset, 0)
 
 
 def _id_unique_vulns(writer, sheet_name):
-    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1]+".csv"), sep="\t")
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
     unique_names_occurrences = df["Title"].value_counts(dropna=True)
 
@@ -79,32 +91,37 @@ def _id_unique_vulns(writer, sheet_name):
 
     ids = [
         f"AV-{v.av_data.company[:3].upper()}-{v.av_data.year}-"
-        f"{str(int(v.av_data.starting_id) + i).zfill(6)}" for i in range(
-            len(df))
+        f"{str(int(v.av_data.starting_id) + i).zfill(6)}"
+        for i in range(len(df))
     ]
 
     df.insert(0, "ID", ids)
 
-    df.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
+    df.to_excel(writer,
+                sheet_name=sheet_name,
+                index=False,
+                header=False,
                 startrow=1)
 
     worksheet = writer.sheets[sheet_name]
 
     add_table(df, v.qualys.WAS.id_unique_vulns_excel_columns, worksheet, 1)
-    df.columns = [''.join(choice(string.ascii_lowercase) for _ in range(5))
-                  for _ in range(len(df.columns))]
+    df.columns = [
+        "".join(choice(string.ascii_lowercase) for _ in range(5))
+        for _ in range(len(df.columns))
+    ]
     adjust_column_width(df, sheet_name, writer)
 
 
 def _host_severity(writer, sheet_name):
-    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1]+".csv"), sep="\t")
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
     df = df[v.qualys.WAS.host_severity_columns]
 
     df = df.groupby(["IP", "Severity"]).size().reset_index(name="Count")
 
-    df_host_vulns = pd.DataFrame(index=df["IP"].unique(),
-                                 columns=
-                                 v.qualys.WAS.host_severity_excel_columns[1:])
+    df_host_vulns = pd.DataFrame(
+        index=df["IP"].unique(),
+        columns=v.qualys.WAS.host_severity_excel_columns[1:])
 
     df_host_vulns.fillna(0, inplace=True)
 
@@ -119,16 +136,25 @@ def _host_severity(writer, sheet_name):
     df_host_vulns.reset_index(inplace=True)
     df_host_vulns.columns = v.qualys.WAS.host_severity_excel_columns
 
-    df_host_vulns.to_excel(writer, sheet_name=sheet_name, index=False,
-                           header=False, startrow=1)
+    df_host_vulns.to_excel(writer,
+                           sheet_name=sheet_name,
+                           index=False,
+                           header=False,
+                           startrow=1)
 
     workbook = writer.book
     worksheet = writer.sheets[sheet_name]
-    add_table(df_host_vulns, v.qualys.WAS.host_severity_excel_columns,
-              worksheet, 1, 'Table_VulnsHost', True,
-              f"=SUM(Table_VulnsHost[[#This Row],["
-              f"{v.qualys.WAS.host_severity_excel_columns[1]}]:["
-              f"{v.qualys.WAS.host_severity_excel_columns[-1]}]])")
+    add_table(
+        df_host_vulns,
+        v.qualys.WAS.host_severity_excel_columns,
+        worksheet,
+        1,
+        "Table_VulnsHost",
+        True,
+        f"=SUM(Table_VulnsHost[[#This Row],["
+        f"{v.qualys.WAS.host_severity_excel_columns[1]}]:["
+        f"{v.qualys.WAS.host_severity_excel_columns[-1]}]])",
+    )
 
     __distribution_vulns(df_host_vulns, workbook, worksheet)
     __vuln_distribution_chart(workbook, worksheet, sheet_name)
@@ -141,33 +167,38 @@ def _host_severity(writer, sheet_name):
 
 
 def _host_unique_vulns(writer, sheet_name):
-    buscar_v1 = "IF(VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2," \
-                "FALSE)<>0,VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2," \
-                "FALSE),\"Not found\")"
+    buscar_v1 = ("IF(VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2,"
+                 "FALSE)<>0,VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2,"
+                 'FALSE),"Not found")')
     buscar_v2 = "VLOOKUP(A{},Table_VulnsHost[[Host]:[Critical]],6,FALSE)"
 
-    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1]+".csv"), sep="\t")
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
-    df = pd.DataFrame(df['IP'].unique())
+    df = pd.DataFrame(df["IP"].unique())
 
-    df.to_excel(writer, sheet_name=sheet_name, index=False,
-                header=False, startrow=1)
+    df.to_excel(writer,
+                sheet_name=sheet_name,
+                index=False,
+                header=False,
+                startrow=1)
 
     worksheet = writer.sheets[sheet_name]
 
-    for n_row in range(2, len(df)+2):
+    for n_row in range(2, len(df) + 2):
         worksheet.write_formula(f"B{n_row}", buscar_v1.format(n_row, n_row))
         worksheet.write_formula(f"C{n_row}", buscar_v2.format(n_row))
 
     add_table(df, v.qualys.WAS.host_unique_vulns_excel_columns, worksheet, 1)
-    df.columns = [''.join(choice(string.ascii_lowercase) for _ in range(5))
-                  for _ in range(len(df.columns))]
+    df.columns = [
+        "".join(choice(string.ascii_lowercase) for _ in range(5))
+        for _ in range(len(df.columns))
+    ]
     adjust_column_width(df, sheet_name, writer)
     worksheet.set_column("B:B", 50)
 
 
 def _top_5_vulns(writer, sheet_name):
-    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1]+".csv"), sep="\t")
+    df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
     df = df[v.qualys.WAS.top_5_vulns_columns]
 
@@ -178,13 +209,16 @@ def _top_5_vulns(writer, sheet_name):
         if n_severity > 0:
             df = df[df["Severity"] == severity]
             df.drop("Severity", axis=1, inplace=True)
-            v.qualys.WAS.top_5_vulns_excel_columns[1] = \
-                v.qualys.WAS.top_5_vulns_excel_columns[1].format(severity)
+            v.qualys.WAS.top_5_vulns_excel_columns[
+                1] = v.qualys.WAS.top_5_vulns_excel_columns[1].format(severity)
             break
 
     df.sort_values(by="Count", ascending=False, inplace=True)
 
-    df.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
+    df.to_excel(writer,
+                sheet_name=sheet_name,
+                index=False,
+                header=False,
                 startrow=1)
 
     worksheet = writer.sheets[sheet_name]
@@ -195,13 +229,13 @@ def _top_5_vulns(writer, sheet_name):
 
 
 def __distribution_vulns(df, workbook, worksheet):
-    sums = df.select_dtypes(np.number).sum().rename('Total')
+    sums = df.select_dtypes(np.number).sum().rename("Total")
 
-    cell_format_header = workbook.add_format(
-        {'align': 'center',
-         'valign': 'vcenter',
-         "font_color": "#008000",
-         })
+    cell_format_header = workbook.add_format({
+        "align": "center",
+        "valign": "vcenter",
+        "font_color": "#008000",
+    })
 
     cell_format_bold = workbook.add_format()
     cell_format_bold.set_bold()
@@ -222,113 +256,181 @@ def __distribution_vulns(df, workbook, worksheet):
 
 
 def __vuln_distribution_chart(workbook, worksheet, sheet_name):
-    chart = workbook.add_chart({'type': 'bar'})
+    chart = workbook.add_chart({"type": "bar"})
     chart.add_series({
-        'name': 'VulnerabilitiesDistribution',
-        'categories': f'={sheet_name}!$J$1:$N$1',
-        'values': f'={sheet_name}!$J$2:$N$2',
-        "data_labels": {"value": True},
-        "fill": {"color": "#008000"},
+        "name": "VulnerabilitiesDistribution",
+        "categories": f"={sheet_name}!$J$1:$N$1",
+        "values": f"={sheet_name}!$J$2:$N$2",
+        "data_labels": {
+            "value": True
+        },
+        "fill": {
+            "color": "#008000"
+        },
     })
 
     chart.set_x_axis({
-        'line': {'color': "#E0DCDC"},
-        'major_gridlines': {'visible': False},
-        'values': v.qualys.WAS.host_severity_excel_columns[1:],
+        "line": {
+            "color": "#E0DCDC"
+        },
+        "major_gridlines": {
+            "visible": False
+        },
+        "values": v.qualys.WAS.host_severity_excel_columns[1:],
     })
     chart.set_y_axis({
-        'line': {'none': True},
-        'major_gridlines': {'visible': True,
-                            'line': {'width': 1, 'color': '#E0DCDC'}},
+        "line": {
+            "none": True
+        },
+        "major_gridlines": {
+            "visible": True,
+            "line": {
+                "width": 1,
+                "color": "#E0DCDC"
+            },
+        },
     })
 
-    chart.set_title({'name': 'Distribución de vulnerabilidades detectadas'})
-    chart.set_legend({'none': True})
+    chart.set_title({"name": "Distribución de vulnerabilidades detectadas"})
+    chart.set_legend({"none": True})
     chart.set_style(15)
-    worksheet.insert_chart('P1', chart, {'x_offset': 25, 'y_offset': 10,
-                                         'x_scale': 1, 'y_scale': 1})
+    worksheet.insert_chart("P1", chart, {
+        "x_offset": 25,
+        "y_offset": 10,
+        "x_scale": 1,
+        "y_scale": 1
+    })
 
 
 def __top_10_host_severity_chart(workbook, worksheet, sheet_name, severity):
     n_severity = v.qualys.WAS.host_severity_excel_columns.index(severity)
     letter = string.ascii_uppercase[n_severity]
 
-    chart = workbook.add_chart({'type': 'column'})
+    chart = workbook.add_chart({"type": "column"})
     chart.add_series({
-        'name': f'Top10Host{severity}Severity',
-        'categories': f'={sheet_name}!$A$2:$A$12',
-        'values': f'={sheet_name}!${letter}$2:${letter}$12',
-        "data_labels": {"value": True},
-        "fill": {"color": "#008000"},
+        "name": f"Top10Host{severity}Severity",
+        "categories": f"={sheet_name}!$A$2:$A$12",
+        "values": f"={sheet_name}!${letter}$2:${letter}$12",
+        "data_labels": {
+            "value": True
+        },
+        "fill": {
+            "color": "#008000"
+        },
     })
 
     chart.set_x_axis({
-        'line': {'color': "#E0DCDC"},
-        'major_gridlines': {'visible': False},
+        "line": {
+            "color": "#E0DCDC"
+        },
+        "major_gridlines": {
+            "visible": False
+        },
     })
     chart.set_y_axis({
-        'line': {'none': True},
-        'major_gridlines': {'visible': True,
-                            'line': {'width': 1, 'color': '#E0DCDC'}},
+        "line": {
+            "none": True
+        },
+        "major_gridlines": {
+            "visible": True,
+            "line": {
+                "width": 1,
+                "color": "#E0DCDC"
+            },
+        },
     })
 
-    chart.set_title({"name": f"Hosts con mayor cantidad de "
-                             f"vulnerabilidades de tipo \'{severity}\'"})
-    chart.set_legend({'none': True})
+    chart.set_title({
+        "name":
+        f"Hosts con mayor cantidad de "
+        f"vulnerabilidades de tipo '{severity}'"
+    })
+    chart.set_legend({"none": True})
     chart.set_style(15)
 
     y_offset = n_severity * 300
 
-    worksheet.insert_chart(f'P{n_severity}', chart, {'x_offset': 25,
-                                                     'y_offset': y_offset,
-                                                     'x_scale': 1,
-                                                     'y_scale': 1})
+    worksheet.insert_chart(
+        f"P{n_severity}",
+        chart,
+        {
+            "x_offset": 25,
+            "y_offset": y_offset,
+            "x_scale": 1,
+            "y_scale": 1
+        },
+    )
 
 
 def __top_10_host_more_vulns_chart(workbook, worksheet, sheet_name):
-    chart = workbook.add_chart({'type': 'column', 'subtype': 'stacked'})
+    chart = workbook.add_chart({"type": "column", "subtype": "stacked"})
 
     for severity in v.qualys.WAS.host_severity_excel_columns[1:]:
         n_severity = v.qualys.WAS.host_severity_excel_columns.index(severity)
         letter = string.ascii_uppercase[n_severity]
         chart.add_series({
-            'name': severity,
-            'categories': f'={sheet_name}!$A$2:$A$12',
-            'values': f'={sheet_name}!${letter}$2:${letter}$12',
-
+            "name": severity,
+            "categories": f"={sheet_name}!$A$2:$A$12",
+            "values": f"={sheet_name}!${letter}$2:${letter}$12",
         })
 
-    line_chart = workbook.add_chart({'type': 'line'})
+    line_chart = workbook.add_chart({"type": "line"})
 
     line_chart.add_series({
-        'name': 'Total',
-        'categories': f'={sheet_name}!$A$2:$A$12',
-        'values': f'={sheet_name}!$G$2:$G$12',
-        "data_labels": {"value": True, 'border': {'color': 'red'},
-                        'fill': {'color': 'yellow'}, 'position': 'top'},
-        "line": {"none": True, "color": "yellow"},
+        "name": "Total",
+        "categories": f"={sheet_name}!$A$2:$A$12",
+        "values": f"={sheet_name}!$G$2:$G$12",
+        "data_labels": {
+            "value": True,
+            "border": {
+                "color": "red"
+            },
+            "fill": {
+                "color": "yellow"
+            },
+            "position": "top",
+        },
+        "line": {
+            "none": True,
+            "color": "yellow"
+        },
     })
 
     chart.combine(line_chart)
 
     chart.set_x_axis({
-        'line': {'color': "#E0DCDC"},
-        'major_gridlines': {'visible': False},
+        "line": {
+            "color": "#E0DCDC"
+        },
+        "major_gridlines": {
+            "visible": False
+        },
     })
 
     chart.set_y_axis({
-        'line': {'none': True},
-        'major_gridlines': {'visible': True,
-                            'line': {'width': 1, 'color': '#E0DCDC'}},
+        "line": {
+            "none": True
+        },
+        "major_gridlines": {
+            "visible": True,
+            "line": {
+                "width": 1,
+                "color": "#E0DCDC"
+            },
+        },
     })
 
     chart.set_title({"name": "Hosts con mayor cantidad de vulnerabilidades"})
     chart.set_legend({
-        'position': 'bottom',
-        'delete_series': [5],
+        "position": "bottom",
+        "delete_series": [5],
     })
 
     chart.set_style(18)
 
-    worksheet.insert_chart('I4', chart, {'x_offset': -25, 'y_offset': 10,
-                                         'x_scale': 1, 'y_scale': 2})
+    worksheet.insert_chart("I4", chart, {
+        "x_offset": -25,
+        "y_offset": 10,
+        "x_scale": 1,
+        "y_scale": 2
+    })

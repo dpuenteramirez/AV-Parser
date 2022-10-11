@@ -9,8 +9,8 @@ import os
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import excel_col_format
 from av_parser.core.common._output import audit_company_and_width
+from av_parser.core.kiuwan.common import excel_col_format
 
 
 def excel(df, path, sheet_name="Vulnerabilidades del código"):
@@ -101,15 +101,24 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
     chart = workbook.add_chart({"type": "bar"})
 
     chart.add_series({
-        "name": "Vulnerabilities",
-        "categories": "='{}'!$A$2:$A${}".format(sheet_name, len(df) + 1),
-        "values": "='{}'!$B$2:$B${}".format(sheet_name, len(df) + 1),
-        "data_labels": {"value": True},
-        "fill": {"color": "#008000"},
+        "name":
+        "Vulnerabilities",
+        "categories":
+        "='{}'!$A$2:$A${}".format(sheet_name,
+                                  len(df) + 1),
+        "values":
+        "='{}'!$B$2:$B${}".format(sheet_name,
+                                  len(df) + 1),
+        "data_labels": {
+            "value": True
+        },
+        "fill": {
+            "color": "#008000"
+        },
     })
 
     chart.set_title({"name": "Vulnerabilidades por tipo"})
-    chart.set_legend({'none': True})
+    chart.set_legend({"none": True})
     chart.set_style(15)
 
     worksheet.insert_chart("A10", chart)

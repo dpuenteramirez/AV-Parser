@@ -73,10 +73,10 @@ def parser_obsolescence(path, sep=","):
 
     df = pd.read_csv(path, sep=sep)
 
-    df = df[['Risk']]
+    df = df[["Risk"]]
 
-    options = ['High', 'Medium']
-    df = df.loc[df['Risk'].isin(options)]
+    options = ["High", "Medium"]
+    df = df.loc[df["Risk"].isin(options)]
 
     return df
 
@@ -86,10 +86,10 @@ def parser_license(path, sep=","):
 
     df = pd.read_csv(path, sep=sep)
 
-    df = df[['Risk', 'SPDX code', 'Component']]
+    df = df[["Risk", "SPDX code", "Component"]]
 
-    options = ['high', 'medium']
-    df = df.loc[df['Risk'].isin(options)]
+    options = ["high", "medium"]
+    df = df.loc[df["Risk"].isin(options)]
 
     return df
 

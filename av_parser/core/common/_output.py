@@ -5,11 +5,17 @@
 # @Time:        11/10/22 08:30
 
 import string
+
 import variables as v
 
 
-def audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
-                            header=None, width=True):
+def audit_company_and_width(df,
+                            sheet_name,
+                            workbook,
+                            worksheet,
+                            writer,
+                            header=None,
+                            width=True):
     """It writes the summary information of the audit, adds a table with the
      headers, and adjusts the column width
 
@@ -59,15 +65,20 @@ def audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
     })
 
 
-def add_table(df, header, worksheet, offset=-1, name='', total_col=False,
-              formula=''):
+def add_table(df,
+              header,
+              worksheet,
+              offset=-1,
+              name="",
+              total_col=False,
+              formula=""):
     offset = v.offset if offset == -1 else offset
     headers = [{"header": col} for col in header]
 
     if total_col:
         headers.append({"header": "Total", "formula": formula})
 
-    if name == '':
+    if name == "":
         name = f"Table_{worksheet.name}"
         name = name.replace(" ", "_")
 

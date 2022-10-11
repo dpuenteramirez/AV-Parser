@@ -6,6 +6,7 @@
 
 
 class Qualys:
+
     class WAS:
         av_results = [
             "CVE ID",
