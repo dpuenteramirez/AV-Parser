@@ -34,7 +34,7 @@ def _create_output_dir():
     """It creates the output directory if it doesn't exist already."""
     try:
         os.mkdir("output")
-        log.debug(f"Output directory created.\n\tPath: output/")
+        log.debug("Output directory created.\n\tPath: output/")
     except FileExistsError:
         log.debug("Output directory exists already")
     v.log.debug("Output directory: output/")

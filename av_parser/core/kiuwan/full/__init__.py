@@ -67,8 +67,5 @@ def parser_full(dir_path, sep=","):
 
 
 def _check_lists(list1, list2):
-    if len(list1) == len(list2) and len(list1) == sum(
-            [1 for i, j in zip(list1, list2) if i == j]):
-        return True
-    else:
-        return False
+    return bool(len(list1) == len(list2) and len(list1) == sum(
+            [1 for i, j in zip(list1, list2) if i == j]))

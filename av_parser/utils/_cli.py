@@ -35,13 +35,13 @@ def parse_args(parser, args):
         args.file = base_file
         if not exists(base_file):
             v.log.failure("File not found.\nExiting...")
-            exit(1)
+            sys.exit(1)
     elif args.file:
         if exists(args.file) or exists("data/" + args.file):
             v.log.info("Found file. Starting...")
         else:
             v.log.failure("File not found.\nExiting...")
-            exit(1)
+            sys.exit(1)
     else:
         parser.print_help()
-        exit(1)
+        sys.exit(1)

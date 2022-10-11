@@ -20,7 +20,7 @@ def check_csv(path):
         True/False
 
     """
-    return True if path.endswith(".csv") else False
+    return bool(path.endswith(".csv"))
 
 
 def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
