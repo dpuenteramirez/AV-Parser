@@ -4,8 +4,12 @@
 # @Author:      d3x3r
 # @Time:        5/10/22 11:22
 
+obsolescence_risk = "Obsolescence risk"
+
 
 class Kiuwan:
+    """A class to interact with the Kiuwan Reports."""
+
     vuln_excel_columns = [
         "ID",
         "CWE",
@@ -22,6 +26,28 @@ class Kiuwan:
         "Texto de la Línea Fuente",
         "Framework",
         "Comentarios del Desarrollador",
+    ]
+
+    vulnerabilities_parse_columns = [
+        "Rule code",
+        "Rule",
+        "Priority",
+        "CWE",
+        "Software characteristic",
+        "Vulnerability type",
+        "Language",
+        "Effort",
+        "File",
+        "Line number",
+        "Line text",
+        "Source file",
+        "Source line number",
+        "Source line text",
+        "Muted",
+        "Normative",
+        "Status",
+        "CWE Scope",
+        "Framework",
     ]
 
     vuln_parse_columns = [
@@ -69,9 +95,26 @@ class Kiuwan:
         "Fuentes",
     ]
 
-    insights_parse_columns = [
+    insights_components_parse_columns = [
+        "Component",
+        "Group",
+        "Version",
+        "Custom",
+        "Filename",
+        "Language",
+        "#Licenses",
+        "Licenses",
+        "#Vulnerabilities",
+        "CVE",
+        obsolescence_risk,
+        "License risk",
         "Security risk",
-        "Obsolescence risk",
+        " Sources",
+    ]
+
+    insights_comp_parse_columns = [
+        "Security risk",
+        obsolescence_risk,
         "License risk",
         "Group",
         "Version",
@@ -90,3 +133,59 @@ class Kiuwan:
         "None": "Ninguno",
         "Unknown": "Desconocido",
     }
+
+    insights_license_parse_columns = [
+        "License",
+        "Component",
+        "Associated by user",
+        "Type",
+        "SPDX code",
+        "URL",
+        "Risk",
+        "Permissions",
+        "Limitations",
+        "Conditions",
+    ]
+
+    insights_obsolescence_parse_columns = [
+        "Component",
+        "Languaje",
+        "Used version",
+        "Custom",
+        "Date",
+        "Last version",
+        "Date.1",
+        "Releases",
+        "Out of date",
+        "Time inactivity",
+        obsolescence_risk,
+        "Risk",
+    ]
+
+    insights_security_parse_columns = [
+        "CVE",
+        "Private",
+        "CWE",
+        "Last modified",
+        "Exploitability Subscore",
+        "Impact Subscore",
+        "CVSS v2 Base Score",
+        "Description",
+        "Attack vector(V2)",
+        "Acces Complexity(V2)",
+        "Authentication(V2)",
+        "Confidentiality impact(V2)",
+        "Integrity impact(V2)",
+        "Availability impact(V2)",
+        "vector(V2)",
+        "Attack vector(V3)",
+        "Access complexity(V3)",
+        "Privileges Required(V3)",
+        "User Interaction(V3)",
+        "Scope(V3)",
+        "Confidentiality impact(V3)",
+        "Integrity impact(V3)",
+        "Availability impact(V3)",
+        "Component",
+        "Mute",
+    ]

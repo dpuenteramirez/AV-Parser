@@ -1,4 +1,4 @@
-name: AV-PARSER 
+name: AV-PARSER
 channels:
   - conda-forge
   - default

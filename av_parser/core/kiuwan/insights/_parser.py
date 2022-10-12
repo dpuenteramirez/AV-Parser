@@ -4,13 +4,15 @@
 # @Author:      d3x3r
 # @Time:        6/10/22 11:20
 
+import sys
+
 import pandas as pd
 
 import variables as v
 from av_parser.core.kiuwan.common import mapping_df
 
 
-def parser(path, sep=","):
+def parser_components(path, sep=","):
     """It reads the file, cleans it up, and then maps the columns to the
     correct values
 
@@ -28,9 +30,9 @@ def parser(path, sep=","):
         'License risk'
 
     """
-
-    if ".csv" not in path:
-        v.log.error("The file must be a csv file.")
+    if not bool(path.endswith(".csv")):
+        v.log.error(f'The file "{path}" is not a csv file.')
+        sys.exit(1)
 
     with open(path, "r") as f:
         columns = f.readline()
@@ -43,18 +45,108 @@ def parser(path, sep=","):
     try:
         df = mapping_df(
             df,
-            v.kiuwan.insights_parse_columns,
+            v.kiuwan.insights_comp_parse_columns,
             ["Security risk", "Obsolescence risk", "License risk"],
             [v.kiuwan.insights_map] * 3,
         )
     except KeyError:
-        v.log.failure("Format not recognized. Please check the file format "
-                      "and/or the input parametrization.")
-        exit(1)
+        v.log.failure(
+            "Format not recognized. Please check the file format "
+            "and/or the input parametrization."
+        )
+        sys.exit(1)
 
     df["#Vulnerabilities"] = df["#Vulnerabilities"].astype(int)
 
     df.columns = v.kiuwan.insights_excel_columns
+
+    return df
+
+
+def parser_security(path, sep=","):
+    """It reads a CSV file and returns a Pandas dataframe
+
+    Parameters
+    ----------
+    path
+        The path to the file to be parsed.
+    sep, optional
+        The separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe
+
+    """
+    if not bool(path.endswith(".csv")):
+        v.log.error(f'The file "{path}" is not a csv file.')
+        sys.exit(1)
+
+    df = pd.read_csv(path, sep=sep)
+
+    v.log.info("Parsing security file")
+
+    return df
+
+
+def parser_obsolescence(path, sep=","):
+    """This function reads in a csv file, filters out the rows that are not
+    "High" or "Medium" risk, and returns a dataframe with only the "Risk" column
+
+    Parameters
+    ----------
+    path
+        the path to the csv file
+    sep, optional
+        the separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe with the risk column and only the rows that have a risk of
+        high or medium.
+
+    """
+    if not bool(path.endswith(".csv")):
+        v.log.error(f'The file "{path}" is not a csv file.')
+        sys.exit(1)
+
+    df = pd.read_csv(path, sep=sep)
+
+    df = df[["Risk"]]
+
+    options = ["High", "Medium"]
+    df = df.loc[df["Risk"].isin(options)]
+
+    return df
+
+
+def parser_license(path, sep=","):
+    """It reads in a CSV file, filters out the rows that don't have a risk of
+    "high" or "medium", and returns a dataframe with only the columns "Risk",
+    "SPDX code", and "Component"
+
+    Parameters
+    ----------
+    path
+        the path to the CSV file
+    sep, optional
+        The separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe with the columns Risk, SPDX code, and Component.
+
+    """
+    if not bool(path.endswith(".csv")):
+        v.log.error(f'The file "{path}" is not a csv file.')
+        sys.exit(1)
+
+    df = pd.read_csv(path, sep=sep)
+
+    df = df[["Risk", "SPDX code", "Component"]]
+
+    options = ["high", "medium"]
+    df = df.loc[df["Risk"].isin(options)]
 
     return df
 
@@ -78,10 +170,11 @@ def _cleanup(path, n_columns, sep):
         A list of lists.
 
     """
-    cleaned_lines = list()
+    if not bool(path.endswith(".csv")):
+        v.log.error(f'The file "{path}" is not a csv file.')
+        sys.exit(1)
 
-    if ".csv" not in path:
-        v.log.error("The file must be a csv file.")
+    cleaned_lines = []
 
     with open(path, "r") as f:
         lines = f.readlines()
@@ -138,7 +231,7 @@ def _split_line_by_sep_no_quotes(line, sep):
         A list of strings.
 
     """
-    new_line = list()
+    new_line = []
     inside_quotes = False
     text = ""
     for char in line:

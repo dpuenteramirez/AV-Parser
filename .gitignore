@@ -322,3 +322,6 @@ temp/
 data/
 *.xls
 *.xlsx
+
+# Output
+output/

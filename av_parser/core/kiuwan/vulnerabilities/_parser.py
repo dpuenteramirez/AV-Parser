@@ -4,6 +4,9 @@
 # @Author:      d3x3r
 # @Time:        5/10/22 11:35
 
+import os
+import sys
+
 import pandas as pd
 
 import variables as v
@@ -26,7 +29,22 @@ def parser(path, sep=","):
         A dataframe with the columns renamed to match the vuln_excel_columns
 
     """
+    if not bool(path.endswith(".csv")):
+        v.log.error(f'The file "{path}" is not a csv file.')
+        sys.exit(1)
+
     df = pd.read_csv(path, sep=sep)
+
+    df_vuln_type = df["Vulnerability type"].copy()
+
+    df_vuln_type = df_vuln_type.value_counts()
+    df_vuln_type.to_csv(
+        os.path.join(v.temp_dir, "vuln_type.csv"), index=True, header=True
+    )
+    v.log.debug(
+        f"Vulnerability type file created\n\tPath: "
+        f"{os.path.join(v.temp_dir, 'vuln_type.csv')}"
+    )
 
     try:
         df = mapping_df(
@@ -36,9 +54,11 @@ def parser(path, sep=","):
             [v.kiuwan.priority_map, v.kiuwan.software_characteristic_map],
         )
     except KeyError:
-        v.log.failure("Format not recognized. Please check the file format "
-                      "and/or the input parametrization.")
-        exit(1)
+        v.log.failure(
+            "Format not recognized. Please check the file format "
+            "and/or the input parametrization."
+        )
+        sys.exit(1)
 
     df.columns = v.kiuwan.vuln_excel_columns[:-1]
 

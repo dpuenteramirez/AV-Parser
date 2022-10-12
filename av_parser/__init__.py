@@ -19,16 +19,16 @@ __all__ = ["execute", "create_runtime"]
 def create_runtime():
     """It creates the runtime environment for the script."""
     v.start()
-    v.temp_dir = tempfile.mkdtemp()
-    v.log = log
+    v.temp_dir = tempfile.mkdtemp()  # PYL-E0602 - Correctly imported
+    v.log = log  # PYL-E0602 - From pwn
     v.files = [
         "client",
         "scan_info",
         "risk",
         "vulns_per_host",
         "vulns_summary",
-        "av-results-tmp",
-        "av-results",
+        "av_results_tmp",
+        "av_results",
     ]
     v.str = {
         "scan_info": "Scan Information",

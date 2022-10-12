@@ -6,4 +6,91 @@
 
 
 class Qualys:
-    data = {}
+    """A class to interact with the Qualys Reports."""
+
+    class WAS:
+        """A class to interact with the Qualys WAS Reports."""
+
+        av_results = [
+            "CVE ID",
+            "Severity",
+            "Category",
+            "IP",
+            "DNS",
+            "OS",
+            "Protocol",
+            "Title",
+            "Port",
+            "SSL",
+            "PCI Vuln",
+            "Vendor Reference",
+            "Impact",
+            "Exploitability",
+            "Solution",
+            "Results",
+        ]
+
+        av_results_excel_columns = [
+            "CVE",
+            "Severidad",
+            "Categoría",
+            "Host",
+            "DNS",
+            "OS",
+            "Protocolo",
+            "Nombre",
+            "Puerto",
+            "SSL",
+            "Afecta PCI",
+            "Referencia Fabricante",
+            "Impacto",
+            "Exploitabilidad",
+            "Solución",
+            "Resultado",
+        ]
+
+        map_severity = {
+            5: "Critical",
+            4: "High",
+            3: "Medium",
+            2: "Low",
+            1: "Info",
+        }
+
+        id_unique_vulns_excel_columns = [
+            "ID Vuln Cliente",
+            "Nombre",
+            "Ocurrencias",
+        ]
+
+        host_severity_columns = [
+            "IP",
+            "Severity",
+        ]
+
+        host_severity_excel_columns = [
+            "Host",
+            "Info",
+            "Low",
+            "Medium",
+            "High",
+            "Critical",
+        ]
+
+        host_unique_vulns_excel_columns = [
+            "Host",
+            "Nombre",
+            "Critical",
+        ]
+
+        top_5_vulns_columns = [
+            "Title",
+            "Severity",
+        ]
+
+        top_5_vulns_excel_columns = [
+            "Nombre",
+            "Ocurrencias de tipo {}",
+        ]
+
+    WAS = WAS()
