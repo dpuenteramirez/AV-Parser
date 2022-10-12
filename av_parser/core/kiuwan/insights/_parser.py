@@ -31,7 +31,7 @@ def parser_components(path, sep=","):
 
     """
     if not bool(path.endswith(".csv")):
-        v.log.error(f"The file \"{path}\" is not a csv file.")
+        v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
 
     with open(path, "r") as f:
@@ -79,7 +79,7 @@ def parser_security(path, sep=","):
 
     """
     if not bool(path.endswith(".csv")):
-        v.log.error(f"The file \"{path}\" is not a csv file.")
+        v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)
@@ -107,7 +107,7 @@ def parser_obsolescence(path, sep=","):
 
     """
     if not bool(path.endswith(".csv")):
-        v.log.error(f"The file \"{path}\" is not a csv file.")
+        v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)
@@ -138,7 +138,7 @@ def parser_license(path, sep=","):
 
     """
     if not bool(path.endswith(".csv")):
-        v.log.error(f"The file \"{path}\" is not a csv file.")
+        v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)
@@ -171,7 +171,7 @@ def _cleanup(path, n_columns, sep):
 
     """
     if not bool(path.endswith(".csv")):
-        v.log.error(f"The file \"{path}\" is not a csv file.")
+        v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
 
     cleaned_lines = []
