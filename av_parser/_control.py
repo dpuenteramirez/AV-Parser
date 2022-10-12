@@ -124,7 +124,8 @@ def execute():
                 log.error("Format not supported")
                 sys.exit(1)
 
-    except Exception as e:
+    except Exception as e: # skipcq - PYL-W0703 - We want to catch all
+        # exceptions
         log.warning(e)
         log.warning("An error occurred. Please, check the log file.")
 
@@ -268,9 +269,9 @@ def _check_company_file():
             v.av_data.starting_id = int(company_data["starting id"][0])
             v.log.success("Company file found and loaded.")
             return True
-        else:
-            v.log.info("Company file is not valid. Asking for input...")
-            return False
+
+        v.log.info("Company file is not valid. Asking for input...")
+        return False
 
     except IndexError:
         v.log.info("Company file is empty or does not match the required "

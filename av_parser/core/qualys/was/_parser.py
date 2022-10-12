@@ -157,11 +157,11 @@ def _split_df(filepath):
         the path to the file to be split
 
     """
-    file_ = open(filepath, "r")
 
-    file_r = file_.read()
-    r_newlines = "".join(file_r.splitlines())
-    file_.close()
+    with open(filepath, "r") as file_:
+        file_r = file_.read()
+        r_newlines = "".join(file_r.splitlines())
+
     chunks = re.split(re_ipv4, r_newlines)
     tmp = []
     str_tmp = ""

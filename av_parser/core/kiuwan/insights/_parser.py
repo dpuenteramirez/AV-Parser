@@ -161,7 +161,7 @@ def _cleanup(path, n_columns, sep):
         A list of lists.
 
     """
-    cleaned_lines = list()
+    cleaned_lines = []
 
     check_csv(path)
 
@@ -220,7 +220,7 @@ def _split_line_by_sep_no_quotes(line, sep):
         A list of strings.
 
     """
-    new_line = list()
+    new_line = []
     inside_quotes = False
     text = ""
     for char in line:

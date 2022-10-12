@@ -51,18 +51,17 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
     excel_col_format(df, workbook, worksheet, "#B6D7A8", "Muy Baja", "C")
 
     v_center = workbook.add_format({"align": "vcenter"})
-    worksheet.conditional_format("A1:G{}".format(len(df)), {
+    worksheet.conditional_format(f"A1:G{len(df)}", {
         "type": "no_blanks",
         "format": v_center
     })
 
     soft_characteristics = workbook.add_format({"bold": True})
     worksheet.conditional_format(
-        "D{}:D{}".format(v.offset,
-                         len(df) + v.offset),
+        f"D{v.offset}:D{len(df) + v.offset}",
         {
             "type": "formula",
-            "criteria": '=$D{}="{}"'.format(v.offset, "Seguridad"),
+            "criteria": '=$D{v.offset}=Seguridad',
             "format": soft_characteristics,
         },
     )
@@ -118,11 +117,9 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
         "name":
         "Vulnerabilities",
         "categories":
-        "='{}'!$A$2:$A${}".format(sheet_name,
-                                  len(df) + 1),
+        f"='{sheet_name}'!$A$2:$A${len(df) + 1}",
         "values":
-        "='{}'!$B$2:$B${}".format(sheet_name,
-                                  len(df) + 1),
+        f"='{sheet_name}'!$B$2:$B${len(df) + 1}",
         "data_labels": {
             "value": True
         },

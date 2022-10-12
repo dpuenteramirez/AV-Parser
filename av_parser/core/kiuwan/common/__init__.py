@@ -99,12 +99,10 @@ def excel_col_format(df,
         "bg_color": bg_color,
     })
     worksheet.conditional_format(
-        "{}{}:{}{}".format(column_letter, v.offset, column_letter,
-                           len(df) + v.offset),
+        f"{column_letter}{v.offset}:{column_letter}{len(df) + v.offset}",
         {
             "type": "formula",
-            "criteria": '=${}{}="{}"'.format(column_letter, v.offset,
-                                             criteria),
+            "criteria": f'=${column_letter}{v.offset}="{criteria}"',
             "format": formatting,
         },
     )

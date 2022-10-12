@@ -168,7 +168,7 @@ def _host_severity(writer, sheet_name):
 
     df_host_vulns.fillna(0, inplace=True)
 
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         df_host_vulns.loc[row["IP"], row["Severity"]] = row["Count"]
 
     total_vulns = df_host_vulns.sum(axis=1)
