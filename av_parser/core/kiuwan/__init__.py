@@ -8,6 +8,8 @@ obsolescence_risk = "Obsolescence risk"
 
 
 class Kiuwan:
+    """A class to interact with the Kiuwan Reports."""
+
     vuln_excel_columns = [
         "ID",
         "CWE",

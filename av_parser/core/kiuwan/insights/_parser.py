@@ -9,7 +9,8 @@ import sys
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import check_csv, mapping_df
+from av_parser.core.kiuwan.common import mapping_df
+from av_parser.core.common import check_csv
 
 
 def parser_components(path, sep=","):
@@ -30,9 +31,7 @@ def parser_components(path, sep=","):
         'License risk'
 
     """
-
     check_csv(path)
-
     with open(path, "r") as f:
         columns = f.readline()
         n_columns = columns.count(sep)
@@ -164,7 +163,6 @@ def _cleanup(path, n_columns, sep):
     cleaned_lines = []
 
     check_csv(path)
-
     with open(path, "r") as f:
         lines = f.readlines()
 

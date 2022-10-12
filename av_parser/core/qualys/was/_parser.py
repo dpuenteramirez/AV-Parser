@@ -6,6 +6,7 @@
 
 import os
 import re
+from av_parser.core.common import check_csv
 
 import pandas as pd
 
@@ -24,6 +25,7 @@ def parser(path):
         The path to the file to be parsed.
 
     """
+    check_csv(path)
     p_split = v.log.progress("Splitting file")
     f = open(path, "r")
     empty_lines = 0
@@ -157,7 +159,7 @@ def _split_df(filepath):
         the path to the file to be split
 
     """
-
+    check_csv(filepath)
     with open(filepath, "r") as file_:
         file_r = file_.read()
         r_newlines = "".join(file_r.splitlines())

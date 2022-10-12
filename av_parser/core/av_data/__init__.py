@@ -8,6 +8,8 @@ from datetime import date
 
 
 class AVData:
+    """A class to interact with the common data and the company."""
+
     company = ""
     component = ""
     year = 0

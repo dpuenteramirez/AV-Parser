@@ -6,8 +6,10 @@
 
 
 class Qualys:
+    """A class to interact with the Qualys Reports."""
 
     class WAS:
+        """A class to interact with the Qualys WAS Reports."""
         av_results = [
             "CVE ID",
             "Severity",

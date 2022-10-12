@@ -7,22 +7,6 @@
 import variables as v
 
 
-def check_csv(path):
-    """It checks if the path is a csv file
-
-    Parameters
-    ----------
-    path
-        The path to the file
-
-    Returns
-    -------
-        True/False
-
-    """
-    return bool(path.endswith(".csv"))
-
-
 def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     """It takes a dataframe, a list of columns to parse, a list of columns to
     map, and a list of dictionaries to map the columns to, and returns a
@@ -48,13 +32,9 @@ def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     """
     df = df.filter(items=parse_columns, axis=1)
 
-    ids = [
-        "COD-{}-{}-{}".format(
-            v.av_data.company,
-            v.av_data.year,
-            str(int(v.av_data.starting_id) + i).zfill(6),
-        ) for i in range(len(df))
-    ]
+    ids = [f"COD-{v.av_data.company}-{v.av_data.year}-"
+           f"{str(int(v.av_data.starting_id) + i).zfill(6)}"
+           for i in range(len(df))]
 
     df.insert(0, "ID", ids)
 

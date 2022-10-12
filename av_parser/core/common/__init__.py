@@ -11,3 +11,19 @@ __all__ = [
     "adjust_column_width",
     "add_table",
 ]
+
+
+def check_csv(path):
+    """It checks if the path is a csv file
+
+    Parameters
+    ----------
+    path
+        The path to the file
+
+    Returns
+    -------
+        True/False
+
+    """
+    return bool(path.endswith(".csv"))

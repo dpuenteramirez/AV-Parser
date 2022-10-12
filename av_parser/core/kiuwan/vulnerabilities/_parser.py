@@ -10,7 +10,8 @@ import sys
 import pandas as pd
 
 import variables as v
-from av_parser.core.kiuwan.common import check_csv, mapping_df
+from av_parser.core.kiuwan.common import mapping_df
+from av_parser.core.common import check_csv
 
 
 def parser(path, sep=","):

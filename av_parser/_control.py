@@ -48,7 +48,7 @@ def _create_tmp_dir():
         log.debug(f"Temporary directory created.\n\tPath: {v.temp_dir}")
     except FileExistsError:
         log.debug("Temporary directory exists already")
-    v.log.debug("Temporary directory: {}".format(v.temp_dir))
+    v.log.debug(f"Temporary directory: {v.temp_dir}")
 
 
 def execute():
@@ -64,7 +64,7 @@ def execute():
         type=str,
         help=textwrap.dedent("""\
                    File to analyze.
-                   The file must be in the \'data\' directory 
+                   The file must be in the \'data\' directory
                    or a full path must be provided.
             """),
     )
