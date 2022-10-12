@@ -10,6 +10,7 @@ class Qualys:
 
     class WAS:
         """A class to interact with the Qualys WAS Reports."""
+
         av_results = [
             "CVE ID",
             "Severity",

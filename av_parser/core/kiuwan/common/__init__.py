@@ -32,9 +32,11 @@ def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     """
     df = df.filter(items=parse_columns, axis=1)
 
-    ids = [f"COD-{v.av_data.company}-{v.av_data.year}-"
-           f"{str(int(v.av_data.starting_id) + i).zfill(6)}"
-           for i in range(len(df))]
+    ids = [
+        f"COD-{v.av_data.company}-{v.av_data.year}-"
+        f"{str(int(v.av_data.starting_id) + i).zfill(6)}"
+        for i in range(len(df))
+    ]
 
     df.insert(0, "ID", ids)
 
