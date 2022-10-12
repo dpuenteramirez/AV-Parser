@@ -37,11 +37,13 @@ def parser(path, sep=","):
     df_vuln_type = df["Vulnerability type"].copy()
 
     df_vuln_type = df_vuln_type.value_counts()
-    df_vuln_type.to_csv(os.path.join(v.temp_dir, "vuln_type.csv"),
-                        index=True,
-                        header=True)
-    v.log.debug(f"Vulnerability type file created\n\tPath: "
-                f"{os.path.join(v.temp_dir, 'vuln_type.csv')}")
+    df_vuln_type.to_csv(
+        os.path.join(v.temp_dir, "vuln_type.csv"), index=True, header=True
+    )
+    v.log.debug(
+        f"Vulnerability type file created\n\tPath: "
+        f"{os.path.join(v.temp_dir, 'vuln_type.csv')}"
+    )
 
     try:
         df = mapping_df(
@@ -51,8 +53,10 @@ def parser(path, sep=","):
             [v.kiuwan.priority_map, v.kiuwan.software_characteristic_map],
         )
     except KeyError:
-        v.log.failure("Format not recognized. Please check the file format "
-                      "and/or the input parametrization.")
+        v.log.failure(
+            "Format not recognized. Please check the file format "
+            "and/or the input parametrization."
+        )
         sys.exit(1)
 
     df.columns = v.kiuwan.vuln_excel_columns[:-1]

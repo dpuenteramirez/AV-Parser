@@ -35,8 +35,9 @@ def parser(path):
     vulns_table = False
     for line in f:
         if not vulns_table:
-            buffer_, empty_lines = _line_appears_ok(buffer_, empty_lines, line,
-                                                    mid_buffer, p_split)
+            buffer_, empty_lines = _line_appears_ok(
+                buffer_, empty_lines, line, mid_buffer, p_split
+            )
 
             if empty_lines == 5:
                 buffer_ = []
@@ -46,29 +47,24 @@ def parser(path):
             buffer_.append(line)
 
     with open(
-            os.path.join(v.temp_dir,
-                         v.str["tmp_file_format"].format(v.files[-2])),
-            "w") as f:
+        os.path.join(v.temp_dir, v.str["tmp_file_format"].format(v.files[-2])), "w"
+    ) as f:
         f.write("".join(buffer_))
 
     p_split.status("Creating DataFrame with vulns")
-    _split_df(
-        os.path.join(v.temp_dir, v.str["tmp_file_format"].format(v.files[-2])))
+    _split_df(os.path.join(v.temp_dir, v.str["tmp_file_format"].format(v.files[-2])))
 
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
     df["Severity"] = df["Severity"].map(v.qualys.WAS.map_severity)
-    df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"),
-              sep="\t",
-              index=False)
+    df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t", index=False)
 
     p_split.success(v.str["file_created"].format(v.files[-1]))
 
     v.log.success("File split successfully")
 
     with open(
-            os.path.join(v.temp_dir,
-                         v.str["tmp_file_format"].format(v.files[0])),
-            "r") as f:
+        os.path.join(v.temp_dir, v.str["tmp_file_format"].format(v.files[0])), "r"
+    ) as f:
         _ = f.readline()
         line = f.readline()
         v.av_data.company = line.split(",")[0].replace('"', "")
@@ -99,11 +95,11 @@ def _line_appears_ok(buffer_, empty_lines, line, mid_buffer, p_split):
     if not line.strip():
         if len(buffer_) > 0:
             with open(
-                    os.path.join(
-                        v.temp_dir,
-                        v.str["tmp_file_format"].format(v.files[empty_lines]),
-                    ),
-                    "w",
+                os.path.join(
+                    v.temp_dir,
+                    v.str["tmp_file_format"].format(v.files[empty_lines]),
+                ),
+                "w",
             ) as f:
                 f.write("".join(buffer_))
             buffer_ = []
@@ -186,9 +182,7 @@ def _split_df(filepath):
     os.remove(filepath)
     v.log.debug(v.str["file_deleted"].format(v.files[-2]))
 
-    df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"),
-              index=False,
-              sep="\t")
+    df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), index=False, sep="\t")
 
 
 def _split_line(line, new_line):
