@@ -63,7 +63,7 @@ def parser_security(path, sep=","):
 
     df = pd.read_csv(path, sep=sep)
 
-    # TODO: find usage of this function
+    v.log.info("Parsing security file")
 
     return df
 

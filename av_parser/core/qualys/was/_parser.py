@@ -24,26 +24,8 @@ def parser(path):
     vulns_table = False
     for line in f:
         if not vulns_table:
-            if not line.strip():
-                if len(buffer_) > 0:
-                    with open(
-                            os.path.join(
-                                v.temp_dir,
-                                v.str["tmp_file_format"].format(
-                                    v.files[empty_lines]),
-                            ),
-                            "w",
-                    ) as f:
-                        f.write("".join(buffer_))
-                    buffer_ = []
-                    empty_lines += 1
-                    v.log.debug(v.str["file_created"].format(
-                        v.files[empty_lines]))
-                    p_split.status(v.str["file_created"].format(
-                        v.files[empty_lines]))
-
-            else:
-                mid_buffer = _clear_line(buffer_, line, mid_buffer)
+            buffer_, empty_lines = _line_appears_ok(buffer_, empty_lines, line,
+                                                    mid_buffer, p_split)
 
             if empty_lines == 5:
                 buffer_ = []
@@ -81,6 +63,30 @@ def parser(path):
         v.av_data.company = line.split(",")[0].replace('"', "")
 
     return True
+
+
+def _line_appears_ok(buffer_, empty_lines, line, mid_buffer, p_split):
+    if not line.strip():
+        if len(buffer_) > 0:
+            with open(
+                    os.path.join(
+                        v.temp_dir,
+                        v.str["tmp_file_format"].format(
+                            v.files[empty_lines]),
+                    ),
+                    "w",
+            ) as f:
+                f.write("".join(buffer_))
+            buffer_ = []
+            empty_lines += 1
+            v.log.debug(v.str["file_created"].format(
+                v.files[empty_lines]))
+            p_split.status(v.str["file_created"].format(
+                v.files[empty_lines]))
+
+    else:
+        _clear_line(buffer_, line, mid_buffer)
+    return buffer_, empty_lines
 
 
 def _clear_line(buffer, line, mid_buffer):

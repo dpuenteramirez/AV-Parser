@@ -5,6 +5,9 @@
 # @Time:        5/10/22 11:22
 
 
+obsolescence_risk = "Obsolescence risk"
+
+
 class Kiuwan:
     vuln_excel_columns = [
         "ID",
@@ -102,7 +105,7 @@ class Kiuwan:
         "Licenses",
         "#Vulnerabilities",
         "CVE",
-        "Obsolescence risk",
+        obsolescence_risk,
         "License risk",
         "Security risk",
         " Sources",
@@ -110,7 +113,7 @@ class Kiuwan:
 
     insights_comp_parse_columns = [
         "Security risk",
-        "Obsolescence risk",
+        obsolescence_risk,
         "License risk",
         "Group",
         "Version",
@@ -154,7 +157,7 @@ class Kiuwan:
         "Releases",
         "Out of date",
         "Time inactivity",
-        "Obsolescence risk",
+        obsolescence_risk,
         "Risk",
     ]
 
