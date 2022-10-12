@@ -29,11 +29,9 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
     """
     path = path.replace(".xlsx", "_vulns.xlsx")
     writer = pd.ExcelWriter(path, engine="xlsxwriter")
-    df.to_excel(writer,
-                sheet_name=sheet_name,
-                index=False,
-                header=False,
-                startrow=v.offset)
+    df.to_excel(
+        writer, sheet_name=sheet_name, index=False, header=False, startrow=v.offset
+    )
 
     workbook = writer.book
     worksheet = writer.sheets[sheet_name]
@@ -51,10 +49,9 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
     excel_col_format(df, workbook, worksheet, "#B6D7A8", "Muy Baja", "C")
 
     v_center = workbook.add_format({"align": "vcenter"})
-    worksheet.conditional_format(f"A1:G{len(df)}", {
-        "type": "no_blanks",
-        "format": v_center
-    })
+    worksheet.conditional_format(
+        f"A1:G{len(df)}", {"type": "no_blanks", "format": v_center}
+    )
 
     soft_characteristics = workbook.add_format({"bold": True})
     worksheet.conditional_format(
@@ -66,8 +63,9 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
         },
     )
 
-    audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
-                            v.kiuwan.vuln_excel_columns)
+    audit_company_and_width(
+        df, sheet_name, workbook, worksheet, writer, v.kiuwan.vuln_excel_columns
+    )
 
     worksheet.freeze_panes(v.offset, 4)
 
@@ -102,8 +100,9 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
         return
 
     except FileNotFoundError:
-        v.log.warning("Could not find a tmp file. Is it running with "
-                      "enough permissions?")
+        v.log.warning(
+            "Could not find a tmp file. Is it running with " "enough permissions?"
+        )
         return
 
     df.to_excel(writer, sheet_name=sheet_name, index=False)
@@ -113,17 +112,15 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
 
     chart = workbook.add_chart({"type": "bar"})
 
-    chart.add_series({
-        "name": "Vulnerabilities",
-        "categories": f"='{sheet_name}'!$A$2:$A${len(df) + 1}",
-        "values": f"='{sheet_name}'!$B$2:$B${len(df) + 1}",
-        "data_labels": {
-            "value": True
-        },
-        "fill": {
-            "color": "#008000"
-        },
-    })
+    chart.add_series(
+        {
+            "name": "Vulnerabilities",
+            "categories": f"='{sheet_name}'!$A$2:$A${len(df) + 1}",
+            "values": f"='{sheet_name}'!$B$2:$B${len(df) + 1}",
+            "data_labels": {"value": True},
+            "fill": {"color": "#008000"},
+        }
+    )
 
     chart.set_title({"name": "Vulnerabilidades por tipo"})
     chart.set_legend({"none": True})
