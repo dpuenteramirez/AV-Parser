@@ -27,9 +27,7 @@ def def_handler(_, __):
 
 
 def print_headers():
-    """It prints the header and the author's name
-
-    """
+    """It prints the header and the author's name"""
     folder = "resources"
     with open(os.path.join(folder, "av-parser_header.txt"), "r") as f:
         print(f.read())
