@@ -6,11 +6,11 @@
 
 import os
 import re
-from av_parser.core.common import check_csv
 
 import pandas as pd
 
 import variables as v
+from av_parser.core.common import check_csv
 
 re_ipv4 = re.compile(r"(\"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\",)")
 
