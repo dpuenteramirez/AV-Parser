@@ -5,6 +5,7 @@
 # @Time:        5/10/22 11:35
 
 import os
+import sys
 
 import pandas as pd
 
@@ -51,7 +52,7 @@ def parser(path, sep=","):
     except KeyError:
         v.log.failure("Format not recognized. Please check the file format "
                       "and/or the input parametrization.")
-        exit(1)
+        sys.exit(1)
 
     df.columns = v.kiuwan.vuln_excel_columns[:-1]
 

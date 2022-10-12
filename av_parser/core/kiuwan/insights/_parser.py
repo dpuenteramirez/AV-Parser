@@ -4,6 +4,8 @@
 # @Author:      d3x3r
 # @Time:        6/10/22 11:20
 
+import sys
+
 import pandas as pd
 
 import variables as v
@@ -49,7 +51,7 @@ def parser_components(path, sep=","):
     except KeyError:
         v.log.failure("Format not recognized. Please check the file format "
                       "and/or the input parametrization.")
-        exit(1)
+        sys.exit(1)
 
     df["#Vulnerabilities"] = df["#Vulnerabilities"].astype(int)
 
