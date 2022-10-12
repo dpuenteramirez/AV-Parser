@@ -101,7 +101,7 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
 
     except FileNotFoundError:
         v.log.warning(
-            "Could not find a tmp file. Is it running with " "enough permissions?"
+            "Could not find a tmp file. Is it running with enough permissions?"
         )
         return
 
