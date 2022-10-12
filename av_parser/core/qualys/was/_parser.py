@@ -71,18 +71,15 @@ def _line_appears_ok(buffer_, empty_lines, line, mid_buffer, p_split):
             with open(
                     os.path.join(
                         v.temp_dir,
-                        v.str["tmp_file_format"].format(
-                            v.files[empty_lines]),
+                        v.str["tmp_file_format"].format(v.files[empty_lines]),
                     ),
                     "w",
             ) as f:
                 f.write("".join(buffer_))
             buffer_ = []
             empty_lines += 1
-            v.log.debug(v.str["file_created"].format(
-                v.files[empty_lines]))
-            p_split.status(v.str["file_created"].format(
-                v.files[empty_lines]))
+            v.log.debug(v.str["file_created"].format(v.files[empty_lines]))
+            p_split.status(v.str["file_created"].format(v.files[empty_lines]))
 
     else:
         _clear_line(buffer_, line, mid_buffer)

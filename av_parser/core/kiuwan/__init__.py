@@ -4,7 +4,6 @@
 # @Author:      d3x3r
 # @Time:        5/10/22 11:22
 
-
 obsolescence_risk = "Obsolescence risk"
 
 
