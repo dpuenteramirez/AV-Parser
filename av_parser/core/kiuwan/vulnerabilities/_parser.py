@@ -10,7 +10,6 @@ import sys
 import pandas as pd
 
 import variables as v
-from av_parser.core.common import check_csv
 from av_parser.core.kiuwan.common import mapping_df
 
 
@@ -30,7 +29,9 @@ def parser(path, sep=","):
         A dataframe with the columns renamed to match the vuln_excel_columns
 
     """
-    check_csv(path)
+    if not bool(path.endswith(".csv")):
+        v.log.error(f"The file \"{path}\" is not a csv file.")
+        sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)
 

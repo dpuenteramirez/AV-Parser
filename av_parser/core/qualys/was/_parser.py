@@ -6,11 +6,11 @@
 
 import os
 import re
+import sys
 
 import pandas as pd
 
 import variables as v
-from av_parser.core.common import check_csv
 
 re_ipv4 = re.compile(r"(\"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\",)")
 
@@ -25,7 +25,10 @@ def parser(path):
         The path to the file to be parsed.
 
     """
-    check_csv(path)
+    if not bool(path.endswith(".csv")):
+        v.log.error(f"The file \"{path}\" is not a csv file.")
+        sys.exit(1)
+
     p_split = v.log.progress("Splitting file")
     f = open(path, "r")
     empty_lines = 0
@@ -155,7 +158,10 @@ def _split_df(filepath):
         the path to the file to be split
 
     """
-    check_csv(filepath)
+    if not bool(filepath.endswith(".csv")):
+        v.log.error(f"The file \"{filepath}\" is not a csv file.")
+        sys.exit(1)
+
     with open(filepath, "r") as file_:
         file_r = file_.read()
         r_newlines = "".join(file_r.splitlines())

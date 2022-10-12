@@ -9,7 +9,6 @@ import sys
 import pandas as pd
 
 import variables as v
-from av_parser.core.common import check_csv
 from av_parser.core.kiuwan.common import mapping_df
 
 
@@ -31,7 +30,10 @@ def parser_components(path, sep=","):
         'License risk'
 
     """
-    check_csv(path)
+    if not bool(path.endswith(".csv")):
+        v.log.error(f"The file \"{path}\" is not a csv file.")
+        sys.exit(1)
+
     with open(path, "r") as f:
         columns = f.readline()
         n_columns = columns.count(sep)
@@ -76,7 +78,9 @@ def parser_security(path, sep=","):
         A dataframe
 
     """
-    check_csv(path)
+    if not bool(path.endswith(".csv")):
+        v.log.error(f"The file \"{path}\" is not a csv file.")
+        sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)
 
@@ -102,7 +106,9 @@ def parser_obsolescence(path, sep=","):
         high or medium.
 
     """
-    check_csv(path)
+    if not bool(path.endswith(".csv")):
+        v.log.error(f"The file \"{path}\" is not a csv file.")
+        sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)
 
@@ -131,7 +137,9 @@ def parser_license(path, sep=","):
         A dataframe with the columns Risk, SPDX code, and Component.
 
     """
-    check_csv(path)
+    if not bool(path.endswith(".csv")):
+        v.log.error(f"The file \"{path}\" is not a csv file.")
+        sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)
 
@@ -162,9 +170,12 @@ def _cleanup(path, n_columns, sep):
         A list of lists.
 
     """
+    if not bool(path.endswith(".csv")):
+        v.log.error(f"The file \"{path}\" is not a csv file.")
+        sys.exit(1)
+
     cleaned_lines = []
 
-    check_csv(path)
     with open(path, "r") as f:
         lines = f.readlines()
 

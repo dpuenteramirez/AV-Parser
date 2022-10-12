@@ -113,8 +113,10 @@ def execute():
             log.info("Starting analysis...")
 
             if args.format.startswith("qualys"):
+                v.log.debug("Found Qualys format")
                 _qualys(args)
             elif args.format.startswith("kiuwan"):
+                v.log.debug("Found Kiuwan format")
                 _kiuwan(args)
             else:
                 log.error("Format not supported")
