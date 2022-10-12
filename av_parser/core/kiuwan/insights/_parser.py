@@ -5,6 +5,7 @@
 # @Time:        6/10/22 11:20
 
 import pandas as pd
+import sys
 
 import variables as v
 from av_parser.core.kiuwan.common import check_csv, mapping_df
@@ -49,7 +50,7 @@ def parser_components(path, sep=","):
     except KeyError:
         v.log.failure("Format not recognized. Please check the file format "
                       "and/or the input parametrization.")
-        exit(1)
+        sys.exit(1)
 
     df["#Vulnerabilities"] = df["#Vulnerabilities"].astype(int)
 
