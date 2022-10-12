@@ -5,9 +5,9 @@
 # @Time:        5/10/22 11:35
 
 import os
+import sys
 
 import pandas as pd
-import sys
 
 import variables as v
 from av_parser.core.kiuwan.common import check_csv, mapping_df

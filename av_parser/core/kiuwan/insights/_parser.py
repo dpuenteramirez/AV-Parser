@@ -4,8 +4,9 @@
 # @Author:      d3x3r
 # @Time:        6/10/22 11:20
 
-import pandas as pd
 import sys
+
+import pandas as pd
 
 import variables as v
 from av_parser.core.kiuwan.common import check_csv, mapping_df
