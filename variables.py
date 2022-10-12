@@ -6,6 +6,7 @@
 
 
 def start():
+    """It initializes global variables."""
     # PYL-W0601 - It's a global variable
     global root_dir, temp_dir, log, files, str, output, kiuwan, qualys, av_data, offset
     root_dir = None
