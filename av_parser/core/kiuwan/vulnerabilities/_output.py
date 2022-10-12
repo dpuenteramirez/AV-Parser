@@ -61,7 +61,7 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
         f"D{v.offset}:D{len(df) + v.offset}",
         {
             "type": "formula",
-            "criteria": '=$D{v.offset}=Seguridad',
+            "criteria": "=$D{v.offset}=Seguridad",
             "format": soft_characteristics,
         },
     )
@@ -114,12 +114,9 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
     chart = workbook.add_chart({"type": "bar"})
 
     chart.add_series({
-        "name":
-        "Vulnerabilities",
-        "categories":
-        f"='{sheet_name}'!$A$2:$A${len(df) + 1}",
-        "values":
-        f"='{sheet_name}'!$B$2:$B${len(df) + 1}",
+        "name": "Vulnerabilities",
+        "categories": f"='{sheet_name}'!$A$2:$A${len(df) + 1}",
+        "values": f"='{sheet_name}'!$B$2:$B${len(df) + 1}",
         "data_labels": {
             "value": True
         },

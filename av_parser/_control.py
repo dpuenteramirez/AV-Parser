@@ -124,7 +124,7 @@ def execute():
                 log.error("Format not supported")
                 sys.exit(1)
 
-    except Exception as e: # skipcq - PYL-W0703 - We want to catch all
+    except Exception as e:  # skipcq - PYL-W0703 - We want to catch all
         # exceptions
         log.warning(e)
         log.warning("An error occurred. Please, check the log file.")
