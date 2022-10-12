@@ -9,13 +9,9 @@ import string
 import variables as v
 
 
-def audit_company_and_width(df,
-                            sheet_name,
-                            workbook,
-                            worksheet,
-                            writer,
-                            header=None,
-                            width=True):
+def audit_company_and_width(
+    df, sheet_name, workbook, worksheet, writer, header=None, width=True
+):
     """It writes the summary information of the audit, adds a table with the
      headers, and adjusts the column width
 
@@ -37,10 +33,7 @@ def audit_company_and_width(df,
         If True, it will adjust the column width.
 
     """
-    summary_info_format = workbook.add_format({
-        "bold": True,
-        "bg_color": "#79A353"
-    })
+    summary_info_format = workbook.add_format({"bold": True, "bg_color": "#79A353"})
     summary_values_format = workbook.add_format({"bg_color": "#ACF06E"})
     worksheet.write("A8", "Empresa", summary_info_format)
     worksheet.write("A9", "Componente", summary_info_format)
@@ -59,19 +52,12 @@ def audit_company_and_width(df,
     if width:
         adjust_column_width(df, sheet_name, writer)
 
-    worksheet.insert_image("A1", "resources/mnemo_logo.png", {
-        "x_scale": 0.5,
-        "y_scale": 0.5
-    })
+    worksheet.insert_image(
+        "A1", "resources/mnemo_logo.png", {"x_scale": 0.5, "y_scale": 0.5}
+    )
 
 
-def add_table(df,
-              header,
-              worksheet,
-              offset=-1,
-              name="",
-              total_col=False,
-              formula=""):
+def add_table(df, header, worksheet, offset=-1, name="", total_col=False, formula=""):
     """> This function adds a table to a worksheet with the given dataframe,
     header, and worksheet.
 
@@ -106,11 +92,7 @@ def add_table(df,
     table_width_letter = string.ascii_uppercase[len(headers) - 1]
     worksheet.add_table(
         f"A{offset}:{table_width_letter}{offset + len(df.index)}",
-        {
-            "name": name,
-            "columns": headers,
-            "style": "Table Style Medium 18"
-        },
+        {"name": name, "columns": headers, "style": "Table Style Medium 18"},
     )
 
 
@@ -133,8 +115,7 @@ def adjust_column_width(df, sheet_name, writer):
 
     """
     for column in df:
-        column_length = max(df[column].astype(str).map(len).max(),
-                            len(column)) + 10
+        column_length = max(df[column].astype(str).map(len).max(), len(column)) + 10
         col_idx = df.columns.get_loc(column)
         writer.sheets[sheet_name].set_column(col_idx, col_idx, column_length)
 

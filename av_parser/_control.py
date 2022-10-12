@@ -62,31 +62,27 @@ def execute():
         "-f",
         "--file",
         type=str,
-        help=textwrap.dedent("""\
+        help=textwrap.dedent(
+            """\
                    File to analyze.
                    The file must be in the \'data\' directory
                    or a full path must be provided.
-            """),
+            """
+        ),
     )
     parser.add_argument("-g", "--gui", help="GUI mode.", action="store_true")
-    parser.add_argument("-o",
-                        "--output",
-                        help="Output file name.",
-                        type=str,
-                        default="output")
-    parser.add_argument("-H",
-                        "--headers",
-                        help="Do not print headers.",
-                        action="store_true")
-    parser.add_argument("-l",
-                        "--log_level",
-                        help="Verbose mode.",
-                        type=str,
-                        default="info")
-    parser.add_argument("-C",
-                        "--clear",
-                        help="Force clear temporary files.",
-                        action="store_true")
+    parser.add_argument(
+        "-o", "--output", help="Output file name.", type=str, default="output"
+    )
+    parser.add_argument(
+        "-H", "--headers", help="Do not print headers.", action="store_true"
+    )
+    parser.add_argument(
+        "-l", "--log_level", help="Verbose mode.", type=str, default="info"
+    )
+    parser.add_argument(
+        "-C", "--clear", help="Force clear temporary files.", action="store_true"
+    )
     parser.add_argument(
         "-F",
         "--format",
@@ -257,11 +253,12 @@ def _check_company_file():
             return False
 
         if bool(
-                len(required_columns) == len(company_data.columns)
-                and len(required_columns) == sum([
-                    1 for i, j in zip(required_columns, company_data.columns)
-                    if i == j
-                ])):
+            len(required_columns) == len(company_data.columns)
+            and len(required_columns)
+            == sum(
+                [1 for i, j in zip(required_columns, company_data.columns) if i == j]
+            )
+        ):
 
             v.av_data.company = company_data["company cod"][0][:3]
             v.av_data.component = company_data["component"][0]
@@ -274,7 +271,9 @@ def _check_company_file():
         return False
 
     except IndexError:
-        v.log.info("Company file is empty or does not match the required "
-                   "format. Please check data/company_example.csv for a valid "
-                   "format example.")
+        v.log.info(
+            "Company file is empty or does not match the required "
+            "format. Please check data/company_example.csv for a valid "
+            "format example."
+        )
         return False

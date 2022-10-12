@@ -32,9 +32,11 @@ def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     """
     df = df.filter(items=parse_columns, axis=1)
 
-    ids = [f"COD-{v.av_data.company}-{v.av_data.year}-"
-           f"{str(int(v.av_data.starting_id) + i).zfill(6)}"
-           for i in range(len(df))]
+    ids = [
+        f"COD-{v.av_data.company}-{v.av_data.year}-"
+        f"{str(int(v.av_data.starting_id) + i).zfill(6)}"
+        for i in range(len(df))
+    ]
 
     df.insert(0, "ID", ids)
 
@@ -44,13 +46,9 @@ def mapping_df(df, parse_columns, columns_to_map, mapping_dict):
     return df
 
 
-def excel_col_format(df,
-                     workbook,
-                     worksheet,
-                     bg_color,
-                     criteria,
-                     column_letter,
-                     bold=True):
+def excel_col_format(
+    df, workbook, worksheet, bg_color, criteria, column_letter, bold=True
+):
     """This function takes a dataframe, workbook, worksheet, background color,
     criteria, and column letter as inputs and formats the column letter in the
     worksheet with the background color and bold formatting
@@ -74,10 +72,12 @@ def excel_col_format(df,
         True/False
 
     """
-    formatting = workbook.add_format({
-        "bold": bold,
-        "bg_color": bg_color,
-    })
+    formatting = workbook.add_format(
+        {
+            "bold": bold,
+            "bg_color": bg_color,
+        }
+    )
     worksheet.conditional_format(
         f"{column_letter}{v.offset}:{column_letter}{len(df) + v.offset}",
         {

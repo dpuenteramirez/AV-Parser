@@ -28,11 +28,9 @@ def excel_components(df, path, sheet_name="Componentes"):
     path = path.replace(".xlsx", "_components.xlsx")
 
     writer = pd.ExcelWriter(path, engine="xlsxwriter")
-    df.to_excel(writer,
-                sheet_name=sheet_name,
-                index=False,
-                header=False,
-                startrow=v.offset)
+    df.to_excel(
+        writer, sheet_name=sheet_name, index=False, header=False, startrow=v.offset
+    )
 
     workbook = writer.book
     worksheet = writer.sheets[sheet_name]
@@ -61,8 +59,9 @@ def excel_components(df, path, sheet_name="Componentes"):
         for text, color in text_colors.items():
             excel_col_format(df, workbook, worksheet, color, text, letter)
 
-    audit_company_and_width(df, sheet_name, workbook, worksheet, writer,
-                            v.kiuwan.insights_excel_columns)
+    audit_company_and_width(
+        df, sheet_name, workbook, worksheet, writer, v.kiuwan.insights_excel_columns
+    )
 
     worksheet.freeze_panes(v.offset, 3)
 
