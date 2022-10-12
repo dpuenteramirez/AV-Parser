@@ -70,6 +70,18 @@ def excel_components(df, path, sheet_name="Componentes"):
 
 
 def cli_license(df):
+    """It prints the number of high and medium risk licenses in the dataframe
+
+    Parameters
+    ----------
+    df
+        The dataframe that contains the data.
+
+    Returns
+    -------
+        The number of vulnerabilities with a high or medium risk.
+
+    """
     try:
         values = df["Risk"].value_counts(dropna=True)
     except KeyError:
@@ -82,6 +94,23 @@ def cli_license(df):
 
 
 def cli_output(df, values, title):
+    """It takes a dataframe, a list of values, and a title, and prints out the
+    number of times each value appears in the dataframe.
+
+    Parameters
+    ----------
+    df
+        The dataframe to be analyzed
+    values
+        The values you want to count.
+    title
+        The title of the dataframe
+
+    Returns
+    -------
+        The number of times each risk value appears in the dataframe.
+
+    """
     try:
         risk_values = df["Risk"].value_counts(dropna=True)
     except KeyError:

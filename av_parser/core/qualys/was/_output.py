@@ -20,6 +20,14 @@ from av_parser.core.common import (
 
 
 def excel(path):
+    """It creates an Excel file with 5 sheets, each one with a different report
+
+    Parameters
+    ----------
+    path
+        The path to the Excel file to be created.
+
+    """
     p_excel = v.log.progress("Creating Qualys WAS Excel file")
     p_excel.status("Initializing...")
 
@@ -47,6 +55,17 @@ def excel(path):
 
 
 def _av_results(writer, sheet_name):
+    """It reads in the CSV file, filters the dataframe to only include the
+    columns we want, and then writes the dataframe to the Excel file
+
+    Parameters
+    ----------
+    writer
+        the ExcelWriter object
+    sheet_name
+        The name of the sheet in the Excel file.
+
+    """
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
     df = df[v.qualys.WAS.av_results]
@@ -82,6 +101,18 @@ def _av_results(writer, sheet_name):
 
 
 def _id_unique_vulns(writer, sheet_name):
+    """It takes the last file in the list of files, reads it as a csv, and
+    then creates a dataframe with the unique values of the "Title" column and
+    their respective counts
+
+    Parameters
+    ----------
+    writer
+        the ExcelWriter object
+    sheet_name
+        The name of the sheet in the Excel file.
+
+    """
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
     unique_names_occurrences = df["Title"].value_counts(dropna=True)
@@ -114,6 +145,18 @@ def _id_unique_vulns(writer, sheet_name):
 
 
 def _host_severity(writer, sheet_name):
+    """It takes the data from the last file in the list of files, groups it by
+    IP and Severity, and then creates a table with the number of
+    vulnerabilities per severity per IP
+
+    Parameters
+    ----------
+    writer
+        The ExcelWriter object
+    sheet_name
+        The name of the sheet in the Excel file.
+
+    """
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
     df = df[v.qualys.WAS.host_severity_columns]
 
@@ -167,6 +210,18 @@ def _host_severity(writer, sheet_name):
 
 
 def _host_unique_vulns(writer, sheet_name):
+    """It takes the last file in the list of files, reads it as a csv, and
+    then creates a dataframe with the unique IPs. It then writes that
+    dataframe to an Excel sheet, and then adds a table to the sheet
+
+    Parameters
+    ----------
+    writer
+        the ExcelWriter object
+    sheet_name
+        The name of the Excel sheet.
+
+    """
     buscar_v1 = ("IF(VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2,"
                  "FALSE)<>0,VLOOKUP(A{},Table_Resultados_AV[[Host]:[DNS]],2,"
                  'FALSE),"Not found")')
@@ -198,6 +253,20 @@ def _host_unique_vulns(writer, sheet_name):
 
 
 def _top_5_vulns(writer, sheet_name):
+    """It takes the last file in the list of files, reads it into a dataframe,
+    filters the dataframe to only include the columns we want, groups the
+    dataframe by the title and severity of the vulnerability, sums the number of
+    vulnerabilities for each title and severity, sorts the dataframe by the
+    number of vulnerabilities, and writes the dataframe to an Excel file
+
+    Parameters
+    ----------
+    writer
+        the ExcelWriter object
+    sheet_name
+        The name of the sheet in the Excel file.
+
+    """
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
     df = df[v.qualys.WAS.top_5_vulns_columns]
@@ -229,6 +298,19 @@ def _top_5_vulns(writer, sheet_name):
 
 
 def __distribution_vulns(df, workbook, worksheet):
+    """It takes a dataframe, a workbook, and a worksheet, and writes the total
+    number of vulnerabilities for each severity level to the worksheet
+
+    Parameters
+    ----------
+    df
+        The dataframe that contains the data to be written to the Excel file.
+    workbook
+        The workbook object that we created earlier.
+    worksheet
+        The worksheet object that you want to write to.
+
+    """
     sums = df.select_dtypes(np.number).sum().rename("Total")
 
     cell_format_header = workbook.add_format({
@@ -256,6 +338,19 @@ def __distribution_vulns(df, workbook, worksheet):
 
 
 def __vuln_distribution_chart(workbook, worksheet, sheet_name):
+    """It creates a bar chart with the number of vulnerabilities per severity
+    level
+
+    Parameters
+    ----------
+    workbook
+        The workbook object.
+    worksheet
+        The worksheet object.
+    sheet_name
+        The name of the sheet that contains the data for the chart.
+
+    """
     chart = workbook.add_chart({"type": "bar"})
     chart.add_series({
         "name": "VulnerabilitiesDistribution",
@@ -303,6 +398,21 @@ def __vuln_distribution_chart(workbook, worksheet, sheet_name):
 
 
 def __top_10_host_severity_chart(workbook, worksheet, sheet_name, severity):
+    """It creates a chart with the top 10 hosts with the most vulnerabilities
+    of a given severity
+
+    Parameters
+    ----------
+    workbook
+        The workbook object.
+    worksheet
+        The worksheet object.
+    sheet_name
+        The name of the sheet that the chart will be placed on.
+    severity
+        The severity of the vulnerabilities to be displayed in the chart.
+
+    """
     n_severity = v.qualys.WAS.host_severity_excel_columns.index(severity)
     letter = string.ascii_uppercase[n_severity]
 
@@ -363,6 +473,18 @@ def __top_10_host_severity_chart(workbook, worksheet, sheet_name, severity):
 
 
 def __top_10_host_more_vulns_chart(workbook, worksheet, sheet_name):
+    """It creates a chart with the top 10 hosts with more vulnerabilities
+
+    Parameters
+    ----------
+    workbook
+        The workbook object.
+    worksheet
+        The worksheet object.
+    sheet_name
+        The name of the sheet that contains the data.
+
+    """
     chart = workbook.add_chart({"type": "column", "subtype": "stacked"})
 
     for severity in v.qualys.WAS.host_severity_excel_columns[1:]:

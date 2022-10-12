@@ -59,6 +59,20 @@ def parser_components(path, sep=","):
 
 
 def parser_security(path, sep=","):
+    """It reads a CSV file and returns a Pandas dataframe
+
+    Parameters
+    ----------
+    path
+        The path to the file to be parsed.
+    sep, optional
+        The separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe
+
+    """
     check_csv(path)
 
     df = pd.read_csv(path, sep=sep)
@@ -69,6 +83,22 @@ def parser_security(path, sep=","):
 
 
 def parser_obsolescence(path, sep=","):
+    """This function reads in a csv file, filters out the rows that are not
+    "High" or "Medium" risk, and returns a dataframe with only the "Risk" column
+
+    Parameters
+    ----------
+    path
+        the path to the csv file
+    sep, optional
+        the separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe with the risk column and only the rows that have a risk of
+        high or medium.
+
+    """
     check_csv(path)
 
     df = pd.read_csv(path, sep=sep)
@@ -82,6 +112,22 @@ def parser_obsolescence(path, sep=","):
 
 
 def parser_license(path, sep=","):
+    """It reads in a CSV file, filters out the rows that don't have a risk of
+    "high" or "medium", and returns a dataframe with only the columns "Risk",
+    "SPDX code", and "Component"
+
+    Parameters
+    ----------
+    path
+        the path to the CSV file
+    sep, optional
+        The separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe with the columns Risk, SPDX code, and Component.
+
+    """
     check_csv(path)
 
     df = pd.read_csv(path, sep=sep)

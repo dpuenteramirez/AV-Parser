@@ -79,6 +79,20 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
 
 
 def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
+    """It creates a bar chart with the number of vulnerabilities per type
+
+    Parameters
+    ----------
+    path
+        The path to the Excel file.
+    sheet_name, optional
+        The name of the sheet to be created in the Excel file.
+
+    Returns
+    -------
+        A function that takes two arguments, path and sheet_name.
+
+    """
     path = path.replace(".xlsx", "_bar_chart.xlsx")
     writer = pd.ExcelWriter(path, engine="xlsxwriter")
 

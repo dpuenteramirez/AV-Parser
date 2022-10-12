@@ -255,11 +255,10 @@ def _check_company_file():
             v.log.info("Company file is not valid. Asking for input...")
             return False
 
-        if len(required_columns) == len(
-                company_data.columns) and len(required_columns) == sum([
-                    1 for i, j in zip(required_columns, company_data.columns)
-                    if i == j
-                ]):
+        if bool(
+            len(required_columns) == len(company_data.columns)
+            and len(required_columns) == sum([1 for i, j in zip(
+                required_columns, company_data.columns) if i == j])):
 
             v.av_data.company = company_data["company cod"][0][:3]
             v.av_data.component = company_data["component"][0]

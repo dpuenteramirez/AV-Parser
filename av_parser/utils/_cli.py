@@ -12,11 +12,24 @@ import variables as v
 
 
 def def_handler(_, __):
+    """It prints a message to the screen and exits the program
+
+    Parameters
+    ----------
+    _
+        The signal number
+    __
+        The name of the command.
+
+    """
     v.log.failure("Exiting...")
     sys.exit(1)
 
 
 def print_headers():
+    """It prints the header and the author's name
+
+    """
     folder = "resources"
     with open(os.path.join(folder, "av-parser_header.txt"), "r") as f:
         print(f.read())
@@ -28,6 +41,16 @@ def print_headers():
 
 
 def parse_args(parser, args):
+    """It checks if the file exists, and if it doesn't, it exits the program
+
+    Parameters
+    ----------
+    parser
+        The parser object that was created in the main function.
+    args
+        The arguments passed to the program.
+
+    """
     v.log.setLevel(args.log_level)
 
     if args.gui:

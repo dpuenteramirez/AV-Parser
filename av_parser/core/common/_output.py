@@ -72,6 +72,27 @@ def add_table(df,
               name="",
               total_col=False,
               formula=""):
+    """> This function adds a table to a worksheet with the given dataframe,
+    header, and worksheet.
+
+    Parameters
+    ----------
+    df
+        The dataframe you want to add to the worksheet
+    header
+        The header of the table.
+    worksheet
+        The worksheet you want to add the table to
+    offset
+        The row number where the table will start.
+    name
+        The name of the table.
+    total_col, optional
+        If you want to add a total column to the table, set this to True.
+    formula
+        The formula to be used for the total column.
+
+    """
     offset = v.offset if offset == -1 else offset
     headers = [{"header": col} for col in header]
 

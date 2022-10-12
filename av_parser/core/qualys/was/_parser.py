@@ -15,6 +15,15 @@ re_ipv4 = re.compile(r"(\"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\",)")
 
 
 def parser(path):
+    """It splits the file into two files, one with the vulnerabilities table and
+     the other with the rest of the data
+
+    Parameters
+    ----------
+    path
+        The path to the file to be parsed.
+
+    """
     p_split = v.log.progress("Splitting file")
     f = open(path, "r")
     empty_lines = 0
@@ -62,10 +71,29 @@ def parser(path):
         line = f.readline()
         v.av_data.company = line.split(",")[0].replace('"', "")
 
-    return True
-
 
 def _line_appears_ok(buffer_, empty_lines, line, mid_buffer, p_split):
+    """If the line is empty, write the buffer to a file and clear the buffer.
+    If the line is not empty, clear the line
+
+    Parameters
+    ----------
+    buffer_
+        The buffer that holds the lines of the file.
+    empty_lines
+        The number of empty lines that have been encountered.
+    line
+        the current line of the file
+    mid_buffer
+        a list of lines that are in the middle of a paragraph
+    p_split
+        the progress bar
+
+    Returns
+    -------
+        buffer_, empty_lines
+
+    """
     if not line.strip():
         if len(buffer_) > 0:
             with open(
@@ -87,6 +115,26 @@ def _line_appears_ok(buffer_, empty_lines, line, mid_buffer, p_split):
 
 
 def _clear_line(buffer, line, mid_buffer):
+    """If the line has an even number of quotes, then it's a complete line,
+    so we append it to the buffer. If it has an odd number of quotes,
+    then it's an incomplete line, so we append it to the mid_buffer. If the
+    mid_buffer has an even number of quotes, then it's a complete line,
+    so we append it to the buffer
+
+    Parameters
+    ----------
+    buffer
+        This is the list that will hold the lines of the file.
+    line
+        the current line of the file
+    mid_buffer
+        This is a string that will hold the line if it's not complete.
+
+    Returns
+    -------
+        A list of strings.
+
+    """
     if line.count('"') % 2 == 0:
         line = line.replace('"', "")
         buffer.append(line)
@@ -100,6 +148,15 @@ def _clear_line(buffer, line, mid_buffer):
 
 
 def _split_df(filepath):
+    """It takes a filepath, reads the file, splits the file into chunks,
+    splits the chunks into lines, and then writes the lines to a csv file
+
+    Parameters
+    ----------
+    filepath
+        the path to the file to be split
+
+    """
     file_ = open(filepath, "r")
 
     file_r = file_.read()
@@ -112,19 +169,7 @@ def _split_df(filepath):
         if index % 2 == 0:
             line = str_tmp + chunk
             new_line = ""
-            for index_c, c in enumerate(line):
-                if c == ",":
-                    if line[index_c - 1] not in ['"', ","]:
-                        new_line += ";"
-                    else:
-                        new_line += c
-                elif c == '"':
-                    if line[index_c - 1] == '"':
-                        new_line += ""
-                    else:
-                        new_line += c
-                else:
-                    new_line += c
+            new_line = _split_line(line, new_line)
             new_line = new_line.split(",")
             tmp.append(new_line)
             str_tmp = ""
@@ -142,3 +187,35 @@ def _split_df(filepath):
     df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"),
               index=False,
               sep="\t")
+
+
+def _split_line(line, new_line):
+    """It replaces commas with semicolons, but only if the comma is not inside
+    a pair of double quotes
+
+    Parameters
+    ----------
+    line
+        the line to be split
+    new_line
+        the new line that will be written to the new file
+
+    Returns
+    -------
+        A new line with the commas replaced with semicolons.
+
+    """
+    for index_c, c in enumerate(line):
+        if c == ",":
+            if line[index_c - 1] not in ['"', ","]:
+                new_line += ";"
+            else:
+                new_line += c
+        elif c == '"':
+            if line[index_c - 1] == '"':
+                new_line += ""
+            else:
+                new_line += c
+        else:
+            new_line += c
+    return new_line

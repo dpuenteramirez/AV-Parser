@@ -22,6 +22,21 @@ from av_parser.core.kiuwan.vulnerabilities import parser as vuln_parser
 
 
 def parser_full(dir_path, sep=","):
+    """It parses all the files in a directory and outputs the results to the
+    console and to an Excel file
+
+    Parameters
+    ----------
+    dir_path
+        The directory where the files are located
+    sep, optional
+        the separator used in the CSV file.
+
+    Returns
+    -------
+        A dataframe with the parsed data
+
+    """
     v.log.info("Parsing Kiuwan all available data")
     files = os.listdir(dir_path)
 
@@ -67,6 +82,21 @@ def parser_full(dir_path, sep=","):
 
 
 def _check_lists(list1, list2):
+    """It returns True if the two lists are the same length and contain the same
+    elements in the same order
+
+    Parameters
+    ----------
+    list1
+        The first list to compare.
+    list2
+        The list to check against.
+
+    Returns
+    -------
+        A boolean value.
+
+    """
     return bool(
         len(list1) == len(list2)
         and len(list1) == sum([1 for i, j in zip(list1, list2) if i == j]))
