@@ -30,7 +30,7 @@ def parser(path, sep=","):
 
     """
     if not bool(path.endswith(".csv")):
-        v.log.error(f"The file \"{path}\" is not a csv file.")
+        v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
 
     df = pd.read_csv(path, sep=sep)

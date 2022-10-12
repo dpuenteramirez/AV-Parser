@@ -26,7 +26,7 @@ def parser(path):
 
     """
     if not bool(path.endswith(".csv")):
-        v.log.error(f"The file \"{path}\" is not a csv file.")
+        v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
 
     p_split = v.log.progress("Splitting file")
@@ -159,7 +159,7 @@ def _split_df(filepath):
 
     """
     if not bool(filepath.endswith(".csv")):
-        v.log.error(f"The file \"{filepath}\" is not a csv file.")
+        v.log.error(f'The file "{filepath}" is not a csv file.')
         sys.exit(1)
 
     with open(filepath, "r") as file_:
