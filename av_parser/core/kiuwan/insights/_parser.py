@@ -48,8 +48,10 @@ def parser_components(path, sep=","):
             [v.kiuwan.insights_map] * 3,
         )
     except KeyError:
-        v.log.failure("Format not recognized. Please check the file format "
-                      "and/or the input parametrization.")
+        v.log.failure(
+            "Format not recognized. Please check the file format "
+            "and/or the input parametrization."
+        )
         sys.exit(1)
 
     df["#Vulnerabilities"] = df["#Vulnerabilities"].astype(int)
