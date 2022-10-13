@@ -158,8 +158,7 @@ def _pie_chart_languages(offset, writer, sheet_name="Charts"):
     df.columns = ["Language", "LOC"]
 
     percent_col = [
-        f'A{i}&" - "&TEXT(C{i}/SUM($C${offset+1}:$C${len(df) + offset}),"0,' \
-        f'00%")'
+        f'A{i}&" - "&TEXT(C{i}/SUM($C${offset+1}:$C${len(df) + offset}),"0,00%")'
         for i in range(offset + 1, len(df) + offset + 1)
     ]
 
