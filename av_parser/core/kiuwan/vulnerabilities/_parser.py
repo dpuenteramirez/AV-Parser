@@ -71,12 +71,12 @@ def _languages_tmp():
     It creates a CSV file with the list of languages in the Kiuwan
     """
     if len(v.kiuwan.languages) > 0:
-        df = pd.DataFrame(v.kiuwan.languages.values(),
-                          index=v.kiuwan.languages.keys(),
-                          columns=["Language"])
-        df.to_csv(
-            os.path.join(v.temp_dir, "languages.csv"), index=True, header=True
+        df = pd.DataFrame(
+            v.kiuwan.languages.values(),
+            index=v.kiuwan.languages.keys(),
+            columns=["Language"],
         )
+        df.to_csv(os.path.join(v.temp_dir, "languages.csv"), index=True, header=True)
         v.log.debug(
             f"Languages file created\n\tPath: "
             f"{os.path.join(v.temp_dir, 'languages.csv')}"

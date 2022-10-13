@@ -189,18 +189,18 @@ def _kiuwan_vulns_languages():
     It asks the user if they want to generate a language pie chart, and if they
     do, it asks them for the languages and lines of code for each language
     """
-    answer = ''
-    while answer not in ['y', 'n']:
+    answer = ""
+    while answer not in ["y", "n"]:
         answer = input("Do you want to generate a language pie chart? (y/n): ")
         answer = answer.lower().strip()
 
-    if answer == 'y':
+    if answer == "y":
         languages = {}
         print("To stop, press enter without typing anything")
         while True:
             language = input("Language: ").strip()
 
-            if language == '':
+            if language == "":
                 break
 
             lines = input("Lines of code: ")
