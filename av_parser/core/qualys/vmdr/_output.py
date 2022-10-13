@@ -28,7 +28,7 @@ def excel(path):
         The path to the Excel file to be created.
 
     """
-    p_excel = v.log.progress("Creating Qualys WAS Excel file")
+    p_excel = v.log.progress("Creating Qualys VMDR Excel file")
     p_excel.status("Initializing...")
 
     writer = pd.ExcelWriter(path, engine="xlsxwriter")
@@ -51,7 +51,7 @@ def excel(path):
     writer.close()
 
     p_excel.success("All Excel sheets have been created successfully")
-    v.log.success("Qualys WAS Excel file created successfully")
+    v.log.success("Qualys VMDR Excel file created successfully")
 
 
 def _av_results(writer, sheet_name):
@@ -68,7 +68,7 @@ def _av_results(writer, sheet_name):
     """
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
-    df = df[v.qualys.WAS.av_results]
+    df = df[v.qualys.VMDR.av_results]
 
     df.to_excel(
         writer, sheet_name=sheet_name, header=False, index=False, startrow=v.offset
@@ -91,7 +91,7 @@ def _av_results(writer, sheet_name):
         workbook,
         worksheet,
         writer,
-        v.qualys.WAS.av_results_excel_columns,
+        v.qualys.VMDR.av_results_excel_columns,
         False,
     )
 
@@ -130,7 +130,7 @@ def _id_unique_vulns(writer, sheet_name):
 
     worksheet = writer.sheets[sheet_name]
 
-    add_table(df, v.qualys.WAS.id_unique_vulns_excel_columns, worksheet, 1)
+    add_table(df, v.qualys.VMDR.id_unique_vulns_excel_columns, worksheet, 1)
     df.columns = [
         "".join(choice(string.ascii_lowercase) for _ in range(5))
         for _ in range(len(df.columns))
@@ -152,12 +152,12 @@ def _host_severity(writer, sheet_name):
 
     """
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
-    df = df[v.qualys.WAS.host_severity_columns]
+    df = df[v.qualys.VMDR.host_severity_columns]
 
     df = df.groupby(["IP", "Severity"]).size().reset_index(name="Count")
 
     df_host_vulns = pd.DataFrame(
-        index=df["IP"].unique(), columns=v.qualys.WAS.host_severity_excel_columns[1:]
+        index=df["IP"].unique(), columns=v.qualys.VMDR.host_severity_excel_columns[1:]
     )
 
     df_host_vulns.fillna(0, inplace=True)
@@ -171,7 +171,7 @@ def _host_severity(writer, sheet_name):
     df_host_vulns.drop("Total", axis=1, inplace=True)
 
     df_host_vulns.reset_index(inplace=True)
-    df_host_vulns.columns = v.qualys.WAS.host_severity_excel_columns
+    df_host_vulns.columns = v.qualys.VMDR.host_severity_excel_columns
 
     df_host_vulns.to_excel(
         writer, sheet_name=sheet_name, index=False, header=False, startrow=1
@@ -181,20 +181,20 @@ def _host_severity(writer, sheet_name):
     worksheet = writer.sheets[sheet_name]
     add_table(
         df_host_vulns,
-        v.qualys.WAS.host_severity_excel_columns,
+        v.qualys.VMDR.host_severity_excel_columns,
         worksheet,
         1,
         "Table_VulnsHost",
         True,
         f"=SUM(Table_VulnsHost[[#This Row],["
-        f"{v.qualys.WAS.host_severity_excel_columns[1]}]:["
-        f"{v.qualys.WAS.host_severity_excel_columns[-1]}]])",
+        f"{v.qualys.VMDR.host_severity_excel_columns[1]}]:["
+        f"{v.qualys.VMDR.host_severity_excel_columns[-1]}]])",
     )
 
     __distribution_vulns(df_host_vulns, workbook, worksheet)
     __vuln_distribution_chart(workbook, worksheet, sheet_name)
 
-    for severity in v.qualys.WAS.host_severity_excel_columns[1:]:
+    for severity in v.qualys.VMDR.host_severity_excel_columns[1:]:
         __top_10_host_severity_chart(workbook, worksheet, sheet_name, severity)
 
     __top_10_host_more_vulns_chart(workbook, worksheet, sheet_name)
@@ -233,7 +233,7 @@ def _host_unique_vulns(writer, sheet_name):
         worksheet.write_formula(f"B{n_row}", buscar_v1.format(n_row, n_row))
         worksheet.write_formula(f"C{n_row}", buscar_v2.format(n_row))
 
-    add_table(df, v.qualys.WAS.host_unique_vulns_excel_columns, worksheet, 1)
+    add_table(df, v.qualys.VMDR.host_unique_vulns_excel_columns, worksheet, 1)
     df.columns = [
         "".join(choice(string.ascii_lowercase) for _ in range(5))
         for _ in range(len(df.columns))
@@ -259,18 +259,18 @@ def _top_5_vulns(writer, sheet_name):
     """
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
 
-    df = df[v.qualys.WAS.top_5_vulns_columns]
+    df = df[v.qualys.VMDR.top_5_vulns_columns]
 
     df = df.groupby(["Title", "Severity"]).size().reset_index(name="Count")
 
-    for severity in v.qualys.WAS.map_severity.values():
+    for severity in v.qualys.VMDR.map_severity.values():
         n_severity = df[df["Severity"] == severity]["Count"].sum()
         if n_severity > 0:
             df = df[df["Severity"] == severity]
             df.drop("Severity", axis=1, inplace=True)
-            v.qualys.WAS.top_5_vulns_excel_columns[
+            v.qualys.VMDR.top_5_vulns_excel_columns[
                 1
-            ] = v.qualys.WAS.top_5_vulns_excel_columns[1].format(severity)
+            ] = v.qualys.VMDR.top_5_vulns_excel_columns[1].format(severity)
             break
 
     df.sort_values(by="Count", ascending=False, inplace=True)
@@ -279,9 +279,9 @@ def _top_5_vulns(writer, sheet_name):
 
     worksheet = writer.sheets[sheet_name]
 
-    add_table(df, v.qualys.WAS.top_5_vulns_excel_columns, worksheet, 1)
+    add_table(df, v.qualys.VMDR.top_5_vulns_excel_columns, worksheet, 1)
     adjust_column_width(df, sheet_name, writer)
-    worksheet.set_column("B:B", len(v.qualys.WAS.top_5_vulns_excel_columns[1]))
+    worksheet.set_column("B:B", len(v.qualys.VMDR.top_5_vulns_excel_columns[1]))
 
 
 def __distribution_vulns(df, workbook, worksheet):
@@ -355,7 +355,7 @@ def __vuln_distribution_chart(workbook, worksheet, sheet_name):
         {
             "line": {"color": "#E0DCDC"},
             "major_gridlines": {"visible": False},
-            "values": v.qualys.WAS.host_severity_excel_columns[1:],
+            "values": v.qualys.VMDR.host_severity_excel_columns[1:],
         }
     )
     chart.set_y_axis(
@@ -392,7 +392,7 @@ def __top_10_host_severity_chart(workbook, worksheet, sheet_name, severity):
         The severity of the vulnerabilities to be displayed in the chart.
 
     """
-    n_severity = v.qualys.WAS.host_severity_excel_columns.index(severity)
+    n_severity = v.qualys.VMDR.host_severity_excel_columns.index(severity)
     letter = string.ascii_uppercase[n_severity]
 
     chart = workbook.add_chart({"type": "column"})
@@ -455,8 +455,8 @@ def __top_10_host_more_vulns_chart(workbook, worksheet, sheet_name):
     """
     chart = workbook.add_chart({"type": "column", "subtype": "stacked"})
 
-    for severity in v.qualys.WAS.host_severity_excel_columns[1:]:
-        n_severity = v.qualys.WAS.host_severity_excel_columns.index(severity)
+    for severity in v.qualys.VMDR.host_severity_excel_columns[1:]:
+        n_severity = v.qualys.VMDR.host_severity_excel_columns.index(severity)
         letter = string.ascii_uppercase[n_severity]
         chart.add_series(
             {

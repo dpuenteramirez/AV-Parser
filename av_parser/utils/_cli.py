@@ -44,7 +44,7 @@ def parse_args(parser, args):
     Parameters
     ----------
     parser
-        The parser object that was created in the main function.
+        The parser object that vmdr created in the main function.
     args
         The arguments passed to the program.
 
