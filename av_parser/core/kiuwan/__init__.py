@@ -78,6 +78,14 @@ class Kiuwan:
         "Security": "Seguridad",
         "Reliability": "Fiabilidad",
         "Maintainability": "Mantenibilidad",
+        "Portability": "Portabilidad",
+        "Performance": "Rendimiento",
+        "Usability": "Usabilidad",
+        "Internationalization": "Internacionalización",
+        "Accessibility": "Accesibilidad",
+        "Interoperability": "Interoperabilidad",
+        "Compliance": "Cumplimiento",
+        "Other": "Otro",
     }
 
     insights_excel_columns = [
