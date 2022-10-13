@@ -131,16 +131,21 @@ def cli_output(df, values, title):
 
 def _chart_doughnut_components(writer, sheet_name="Charts"):
     df = pd.read_csv(os.path.join(v.temp_dir, "security_risk.csv"))
-    df = pd.DataFrame(df["Security risk"].value_counts(dropna=True),
-                      index=v.kiuwan.insights_risk_types)
+    df = pd.DataFrame(
+        df["Security risk"].value_counts(dropna=True),
+        index=v.kiuwan.insights_risk_types,
+    )
     df_index = pd.DataFrame(df.index)
-    percent_col = [f'A{i}&" - "&TEXT(C{i}/SUM($C$2:$C${len(df)+1}),"0,00%")'
-                   for i in range(2, len(df) + 2)]
+    percent_col = [
+        f'A{i}&" - "&TEXT(C{i}/SUM($C$2:$C${len(df)+1}),"0,00%")'
+        for i in range(2, len(df) + 2)
+    ]
 
     df.fillna(0, inplace=True)
     df.to_excel(writer, sheet_name=sheet_name, startcol=2, index=False)
-    df_index.to_excel(writer, sheet_name=sheet_name, startrow=1, startcol=0,
-                      index=False, header=False)
+    df_index.to_excel(
+        writer, sheet_name=sheet_name, startrow=1, startcol=0, index=False, header=False
+    )
 
     workbook = writer.book
     worksheet = writer.sheets[sheet_name]
@@ -160,7 +165,6 @@ def _chart_doughnut_components(writer, sheet_name="Charts"):
                 {"fill": {"color": "D4E658"}},
                 {"fill": {"color": "D4E658"}},
             ],
-
         }
     )
     chart.set_title({"name": "Riesgo de seguridad en componentes"})
@@ -168,6 +172,3 @@ def _chart_doughnut_components(writer, sheet_name="Charts"):
     chart.set_legend({"percent": True, "position": "bottom"})
 
     worksheet.insert_chart("E1", chart)
-
-
-
