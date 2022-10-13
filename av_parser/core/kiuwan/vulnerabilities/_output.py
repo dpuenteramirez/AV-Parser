@@ -9,7 +9,7 @@ import os
 import pandas as pd
 
 import variables as v
-from av_parser.core.common._output import audit_company_and_width
+from av_parser.core.common import audit_company_and_width
 from av_parser.core.kiuwan.common import excel_col_format
 
 
@@ -58,7 +58,7 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
         f"D{v.offset}:D{len(df) + v.offset}",
         {
             "type": "formula",
-            "criteria": "=$D{v.offset}=Seguridad",
+            "criteria": f'=$D{v.offset}="Seguridad"',
             "format": soft_characteristics,
         },
     )

@@ -8,8 +8,8 @@
 class Qualys:
     """A class to interact with the Qualys Reports."""
 
-    class WAS:
-        """A class to interact with the Qualys WAS Reports."""
+    class VMDR:
+        """A class to interact with the Qualys VMDR Reports."""
 
         av_results = [
             "CVE ID",
@@ -93,4 +93,4 @@ class Qualys:
             "Ocurrencias de tipo {}",
         ]
 
-    WAS = WAS()
+    VMDR = VMDR()

@@ -58,7 +58,7 @@ def parser(path):
     _split_df(os.path.join(v.temp_dir, v.str["tmp_file_format"].format(v.files[-2])))
 
     df = pd.read_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t")
-    df["Severity"] = df["Severity"].map(v.qualys.WAS.map_severity)
+    df["Severity"] = df["Severity"].map(v.qualys.VMDR.map_severity)
     df.to_csv(os.path.join(v.temp_dir, v.files[-1] + ".csv"), sep="\t", index=False)
 
     p_split.success(v.str["file_created"].format(v.files[-1]))

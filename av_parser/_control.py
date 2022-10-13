@@ -25,8 +25,8 @@ from av_parser.core.kiuwan.insights import (
 from av_parser.core.kiuwan.insights import parser_security as kiuwan_parser_security
 from av_parser.core.kiuwan.vulnerabilities import excel as kiuwan_vuln_excel
 from av_parser.core.kiuwan.vulnerabilities import parser as kiuwan_vuln_parser
-from av_parser.core.qualys.was import excel as qualys_was_excel
-from av_parser.core.qualys.was import parser as qualys_was_parser
+from av_parser.core.qualys.vmdr import excel as qualys_vmdr_excel
+from av_parser.core.qualys.vmdr import parser as qualys_vmdr_parser
 
 signal.signal(signal.SIGINT, utils.def_handler)
 
@@ -140,9 +140,13 @@ def _qualys(args):
         The arguments passed to the script.
 
     """
-    if args.format == "qualys-was":
-        qualys_was_parser(args.file)
-        qualys_was_excel(v.output)
+    if args.format == "qualys-vmdr":
+        qualys_vmdr_parser(args.file)
+        qualys_vmdr_excel(v.output)
+
+    else:
+        log.warning("Format not supported")
+        sys.exit(1)
 
 
 def _kiuwan(args):
