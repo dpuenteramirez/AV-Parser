@@ -4,6 +4,7 @@
 # @Author:      d3x3r
 # @Time:        6/10/22 11:20
 
+import os
 import sys
 
 import pandas as pd
@@ -41,6 +42,13 @@ def parser_components(path, sep=","):
 
     cleaned_lines = _cleanup(path, n_columns, sep)
     df = pd.DataFrame(cleaned_lines, columns=columns)
+
+    df_charts = df[["Security risk"]].copy()
+    df_charts.to_csv(os.path.join(v.temp_dir, "security_risk.csv"), index=False)
+    v.log.debug(
+        f"Security risk file created\n\tPath: "
+        f"{os.path.join(v.temp_dir, 'security_risk.csv')}"
+    )
 
     try:
         df = mapping_df(

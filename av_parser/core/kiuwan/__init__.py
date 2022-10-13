@@ -197,3 +197,10 @@ class Kiuwan:
         "Component",
         "Mute",
     ]
+
+    insights_risk_types = [
+        "High",
+        "Medium",
+        "Low",
+        "None",
+    ]
