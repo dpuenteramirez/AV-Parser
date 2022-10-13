@@ -191,7 +191,7 @@ def _kiuwan_vulns_languages():
     """
     answer = ''
     while answer not in ['y', 'n']:
-        answer = input("Do you want to generate a language pie chart? (y/n): ")
+        answer = input("Do you want to generate a language/LOC pie chart? (y/n): ")
         answer = answer.lower().strip()
 
     if answer == 'y':

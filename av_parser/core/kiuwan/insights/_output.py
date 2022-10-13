@@ -130,6 +130,17 @@ def cli_output(df, values, title):
 
 
 def _chart_doughnut_components(writer, sheet_name="Charts"):
+    """It reads the data from the `security_risk.csv` file, creates a new dataframe
+    with the data, and then creates a doughnut chart with the data
+
+    Parameters
+    ----------
+    writer
+        the ExcelWriter object
+    sheet_name, optional
+        The name of the sheet to which the chart will be added.
+
+    """
     df = pd.read_csv(os.path.join(v.temp_dir, "security_risk.csv"))
     df = pd.DataFrame(
         df["Security risk"].value_counts(dropna=True),
@@ -162,8 +173,8 @@ def _chart_doughnut_components(writer, sheet_name="Charts"):
             "points": [
                 {"fill": {"color": "#D01012"}},
                 {"fill": {"color": "#F3B530"}},
-                {"fill": {"color": "D4E658"}},
-                {"fill": {"color": "D4E658"}},
+                {"fill": {"color": "#D4E658"}},
+                {"fill": {"color": "#D4E658"}},
             ],
         }
     )
