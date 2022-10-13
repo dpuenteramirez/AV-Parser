@@ -165,17 +165,29 @@ def _pie_chart_languages(offset, writer, sheet_name="Charts"):
     df_langs = df["Language"].copy()
     df_loc = df["LOC"].copy()
 
-    df_langs.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
-                      startrow=offset, startcol=0)
+    df_langs.to_excel(
+        writer,
+        sheet_name=sheet_name,
+        index=False,
+        header=False,
+        startrow=offset,
+        startcol=0,
+    )
 
-    df_loc.to_excel(writer, sheet_name=sheet_name, index=False, header=True,
-                    startrow=offset-1, startcol=2)
+    df_loc.to_excel(
+        writer,
+        sheet_name=sheet_name,
+        index=False,
+        header=True,
+        startrow=offset - 1,
+        startcol=2,
+    )
 
     workbook = writer.book
     worksheet = writer.sheets[sheet_name]
 
     for index, val in enumerate(percent_col):
-        worksheet.write_formula(f'B{index + offset + 1}', val)
+        worksheet.write_formula(f"B{index + offset + 1}", val)
 
     chart = workbook.add_chart({"type": "doughnut"})
     chart.add_series(
