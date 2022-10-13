@@ -159,6 +159,7 @@ def _kiuwan(args):
 
     """
     if args.format == "kiuwan-vulnerabilities":
+        _kiuwan_vulns_languages()
         df = kiuwan_vuln_parser(args.file)
         kiuwan_vuln_excel(df, v.output)
 
@@ -179,7 +180,33 @@ def _kiuwan(args):
         kiuwan_cli_output(df, ["High", "Medium"], "Obsolescencia")
 
     if args.format == "kiuwan-full":
+        _kiuwan_vulns_languages()
         kiuwan_parser_full(args.file)
+
+
+def _kiuwan_vulns_languages():
+    """
+    It asks the user if they want to generate a language pie chart, and if they
+    do, it asks them for the languages and lines of code for each language
+    """
+    answer = ""
+    while answer not in ["y", "n"]:
+        answer = input("Do you want to generate a language/LOC pie chart? (y/n): ")
+        answer = answer.lower().strip()
+
+    if answer == "y":
+        languages = {}
+        print("To stop, press enter without typing anything")
+        while True:
+            language = input("Language: ").strip()
+
+            if language == "":
+                break
+
+            lines = input("Lines of code: ")
+            languages[language] = int(lines)
+
+        v.kiuwan.languages = languages
 
 
 def _clear_tmp(args):

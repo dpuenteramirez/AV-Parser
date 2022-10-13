@@ -3,6 +3,7 @@
 # @Filename:    _output.py
 # @Author:      d3x3r
 # @Time:        6/10/22 11:20
+import os
 
 import pandas as pd
 
@@ -67,6 +68,12 @@ def excel_components(df, path, sheet_name="Componentes"):
 
     writer.close()
 
+    path = path.replace(".xlsx", "_insights_charts.xlsx")
+    writer = pd.ExcelWriter(path, engine="xlsxwriter")
+    _chart_doughnut_components(writer, sheet_name)
+
+    writer.close()
+
 
 def cli_license(df):
     """It prints the number of high and medium risk licenses in the dataframe
@@ -120,3 +127,59 @@ def cli_output(df, values, title):
     for value in values:
         if value in risk_values:
             print(f"{value}: {risk_values[value]}")
+
+
+def _chart_doughnut_components(writer, sheet_name="Charts"):
+    """It reads the data from the `security_risk.csv` file, creates a new dataframe
+    with the data, and then creates a doughnut chart with the data
+
+    Parameters
+    ----------
+    writer
+        the ExcelWriter object
+    sheet_name, optional
+        The name of the sheet to which the chart will be added.
+
+    """
+    df = pd.read_csv(os.path.join(v.temp_dir, "security_risk.csv"))
+    df = pd.DataFrame(
+        df["Security risk"].value_counts(dropna=True),
+        index=v.kiuwan.insights_risk_types,
+    )
+    df_index = pd.DataFrame(df.index)
+    percent_col = [
+        f'A{i}&" - "&TEXT(C{i}/SUM($C$2:$C${len(df)+1}),"0,00%")'
+        for i in range(2, len(df) + 2)
+    ]
+
+    df.fillna(0, inplace=True)
+    df.to_excel(writer, sheet_name=sheet_name, startcol=2, index=False)
+    df_index.to_excel(
+        writer, sheet_name=sheet_name, startrow=1, startcol=0, index=False, header=False
+    )
+
+    workbook = writer.book
+    worksheet = writer.sheets[sheet_name]
+
+    for index, val in enumerate(percent_col):
+        worksheet.write_formula(f"B{index+2}", val)
+
+    chart = workbook.add_chart({"type": "doughnut"})
+    chart.add_series(
+        {
+            "name": "Componentes",
+            "categories": f"={sheet_name}!$B$2:$B${len(df) + 1}",
+            "values": f"={sheet_name}!$C$2:$C${len(df) + 1}",
+            "points": [
+                {"fill": {"color": "#D01012"}},
+                {"fill": {"color": "#F3B530"}},
+                {"fill": {"color": "#D4E658"}},
+                {"fill": {"color": "#D4E658"}},
+            ],
+        }
+    )
+    chart.set_title({"name": "Riesgo de seguridad en componentes"})
+    chart.set_style(10)
+    chart.set_legend({"percent": True, "position": "bottom"})
+
+    worksheet.insert_chart("E1", chart)

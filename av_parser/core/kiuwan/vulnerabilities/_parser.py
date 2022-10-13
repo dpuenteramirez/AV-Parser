@@ -29,6 +29,7 @@ def parser(path, sep=","):
         A dataframe with the columns renamed to match the vuln_excel_columns
 
     """
+    _languages_tmp()
     if not bool(path.endswith(".csv")):
         v.log.error(f'The file "{path}" is not a csv file.')
         sys.exit(1)
@@ -63,3 +64,20 @@ def parser(path, sep=","):
     df.columns = v.kiuwan.vuln_excel_columns[:-1]
 
     return df
+
+
+def _languages_tmp():
+    """
+    It creates a CSV file with the list of languages in the Kiuwan
+    """
+    if len(v.kiuwan.languages) > 0:
+        df = pd.DataFrame(
+            v.kiuwan.languages.values(),
+            index=v.kiuwan.languages.keys(),
+            columns=["Language"],
+        )
+        df.to_csv(os.path.join(v.temp_dir, "languages.csv"), index=True, header=True)
+        v.log.debug(
+            f"Languages file created\n\tPath: "
+            f"{os.path.join(v.temp_dir, 'languages.csv')}"
+        )
