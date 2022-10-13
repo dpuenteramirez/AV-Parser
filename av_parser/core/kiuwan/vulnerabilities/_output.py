@@ -72,10 +72,14 @@ def excel(df, path, sheet_name="Vulnerabilidades del código"):
     writer.close()
     v.log.success(f"Excel file created: {path}")
 
-    _excel_bar_chart(path)
+    path = path.replace(".xlsx", "_vuln_charts.xlsx")
+    writer = pd.ExcelWriter(path, engine="xlsxwriter")
+    n_vulns = _excel_bar_chart_vulns(writer, path)
+    _pie_chart_languages(n_vulns, writer)
+    writer.close()
 
 
-def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
+def _excel_bar_chart_vulns(writer, path, sheet_name="Charts"):
     """It creates a bar chart with the number of vulnerabilities per type
 
     Parameters
@@ -90,9 +94,6 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
         A function that takes two arguments, path and sheet_name.
 
     """
-    path = path.replace(".xlsx", "_bar_chart.xlsx")
-    writer = pd.ExcelWriter(path, engine="xlsxwriter")
-
     try:
         df = pd.read_csv(os.path.join(v.temp_dir, "vuln_type.csv"))
     except pd.erros.EmptyDataError:
@@ -126,7 +127,68 @@ def _excel_bar_chart(path, sheet_name="Vulnerabilities types"):
     chart.set_legend({"none": True})
     chart.set_style(15)
 
-    worksheet.insert_chart("A10", chart)
+    worksheet.insert_chart("E1", chart)
 
-    writer.close()
     v.log.success(f"Excel bar chart file created: {path}")
+
+    return len(df) + 15
+
+
+def _pie_chart_languages(offset, writer, sheet_name="Charts"):
+    """It creates a pie chart with the languages used in the project
+
+    Parameters
+    ----------
+    offset
+        The row number where the chart will be inserted.
+    writer
+        the ExcelWriter object
+    sheet_name, optional
+        The name of the sheet to which the chart will be added.
+
+    Returns
+    -------
+        A pie chart with the languages and the LOC of each one.
+
+    """
+    if len(v.kiuwan.languages) == 0:
+        return
+
+    df = pd.read_csv(os.path.join(v.temp_dir, "languages.csv"))
+    df.columns = ["Language", "LOC"]
+
+    percent_col = [
+        f'A{i}&" - "&TEXT(C{i}/SUM($C${offset+1}:$C${len(df) + offset}),"0,' \
+        f'00%")'
+        for i in range(offset + 1, len(df) + offset + 1)
+    ]
+
+    df_langs = df["Language"].copy()
+    df_loc = df["LOC"].copy()
+
+    df_langs.to_excel(writer, sheet_name=sheet_name, index=False, header=False,
+                      startrow=offset, startcol=0)
+
+    df_loc.to_excel(writer, sheet_name=sheet_name, index=False, header=True,
+                    startrow=offset-1, startcol=2)
+
+    workbook = writer.book
+    worksheet = writer.sheets[sheet_name]
+
+    for index, val in enumerate(percent_col):
+        worksheet.write_formula(f'B{index + offset + 1}', val)
+
+    chart = workbook.add_chart({"type": "doughnut"})
+    chart.add_series(
+        {
+            "name": "Languages",
+            "categories": f"='{sheet_name}'!$B${offset + 1}:$B${len(df) + offset}",
+            "values": f"='{sheet_name}'!$C${offset + 1}:$C${len(df) + offset}",
+        }
+    )
+
+    chart.set_title({"name": "Lenguajes"})
+    chart.set_style(10)
+    chart.set_legend({"percent": True, "position": "bottom"})
+
+    worksheet.insert_chart(f"E{offset}", chart)
