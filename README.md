@@ -18,11 +18,9 @@ For now the API is under construction and it is not known when it will be public
 
 Fisrt, start by cloning the repository.
 
-{% code overflow="wrap" %}
 ```bash
 git clone https://github.com/dpuenteramirez/AV-Parser.git
 ```
-{% endcode %}
 
 Once this is done, access the repository directory and install all Python dependencies. You can use a pyenv or a Conda virtual env, both configuration files are provided.
 
