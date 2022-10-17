@@ -1,7 +1,7 @@
 # Full usage examples
 
 ```bash
-# Execute Qualys WAS
+# Execute Qualys VMDR
 conda run --no-capture-output -n AV-PARSER python run.py -F qualys-vmdr -f '/Users/d3x3r/Documents/AV-Parser/data/Qualys/vmdr' -l debug -o vmdr -C
 
 # Execute Kiuwan Vulnerabilities
