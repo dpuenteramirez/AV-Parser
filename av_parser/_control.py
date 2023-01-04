@@ -14,6 +14,8 @@ from pwn import log
 
 import variables as v
 from av_parser import utils
+from av_parser.core.kiuwan.api import kiuwan_validate_api_credentials
+from av_parser.core.kiuwan.api import kiuwan_api_control
 from av_parser.core.kiuwan.full import parser_full as kiuwan_parser_full
 from av_parser.core.kiuwan.insights import cli_output as kiuwan_cli_output
 from av_parser.core.kiuwan.insights import excel_components as kiuwan_insights_excel
@@ -92,6 +94,13 @@ def execute():
         "'kiuwan-insights'.",
         type=str,
         default="kiuwan",
+    )
+    parser.add_argument(
+    parser.add_argument(
+        "-u", "--username", help="Kiuwan username.", type=str, default=None
+    )
+    parser.add_argument(
+        "-p", "--password", help="Kiuwan password.", type=str, default=None
     )
     args = parser.parse_args()
 
@@ -182,6 +191,9 @@ def _kiuwan(args):
     if args.format == "kiuwan-full":
         _kiuwan_vulns_languages()
         kiuwan_parser_full(args.file)
+    if args.format == "kiuwan-api":
+        kiuwan_validate_api_credentials()
+        kiuwan_api_control()
 
 
 def _kiuwan_vulns_languages():

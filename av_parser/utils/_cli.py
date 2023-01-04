@@ -63,6 +63,30 @@ def parse_args(parser, args):
         else:
             v.log.failure("File not found.\nExiting...")
             sys.exit(1)
+    elif "api" in args.format:
+        if not args.username or not args.password:
+            v.log.failure("API credentials not found.")
+
+            while True:
+                creds_by_keyboard = input(
+                    "Do you want to enter the credentials by keyboard? [y/n]: ")
+                creds_by_keyboard = creds_by_keyboard.lower().strip()
+                if creds_by_keyboard == 'y':
+                    username = input("Username: ")
+                    password = input("Password: ")
+                    args.username = username
+                    args.password = password
+                    v.log.info("Credentials saved securely.")
+                    break
+                elif creds_by_keyboard.lower() == 'n':
+                    v.log.info("Exiting...")
+                    sys.exit(0)
+                else:
+                    print("Please enter 'y' or 'n'")
+
+        if "kiuwan" in args.format:
+            v.kiuwan.username = args.username
+            v.kiuwan.password = args.password
     else:
         parser.print_help()
         sys.exit(1)
