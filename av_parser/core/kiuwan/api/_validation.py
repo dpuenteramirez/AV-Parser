@@ -16,9 +16,12 @@ def kiuwan_validate_api_credentials():
     response = requests.get(url, auth=(v.kiuwan.username, v.kiuwan.password))
     if response.status_code == 200:
         v.log.success("Kiuwan API credentials are valid")
-        v.log.info("Remaining Quota: {}".format(response.headers[
-                                                    "X-QuotaLimit-Remaining"]))
+        v.log.info(
+            "Remaining Quota: {}".format(response.headers["X-QuotaLimit-Remaining"])
+        )
     else:
-        v.log.failure("Kiuwan API credentials are not valid. Please, "
-                      "check your credentials and try again.")
+        v.log.failure(
+            "Kiuwan API credentials are not valid. Please, "
+            "check your credentials and try again."
+        )
         sys.exit(1)
