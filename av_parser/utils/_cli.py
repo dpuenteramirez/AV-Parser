@@ -69,16 +69,17 @@ def parse_args(parser, args):
 
             while True:
                 creds_by_keyboard = input(
-                    "Do you want to enter the credentials by keyboard? [y/n]: ")
+                    "Do you want to enter the credentials by keyboard? [y/n]: "
+                )
                 creds_by_keyboard = creds_by_keyboard.lower().strip()
-                if creds_by_keyboard == 'y':
+                if creds_by_keyboard == "y":
                     username = input("Username: ")
                     password = input("Password: ")
                     args.username = username
                     args.password = password
                     v.log.info("Credentials saved securely.")
                     break
-                elif creds_by_keyboard.lower() == 'n':
+                elif creds_by_keyboard.lower() == "n":
                     v.log.info("Exiting...")
                     sys.exit(0)
                 else:

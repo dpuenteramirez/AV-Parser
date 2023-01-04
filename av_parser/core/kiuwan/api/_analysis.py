@@ -65,14 +65,15 @@ def _select_application(apps_dict):
 
     v.log.success(f"Application selected: {apps_dict[app_index - 1]['name']}")
 
-    return apps_dict[app_index - 1]['name']
+    return apps_dict[app_index - 1]["name"]
 
 
 def _select_analysis(app_name):
     """It selects the analysis to analyze."""
     v.log.info("Getting analysis from the Kiuwan API")
     url = v.kiuwan.api_urls_dict["base"] + v.kiuwan.api_urls_dict[
-        "get_analysis"].format(app_name)
+        "get_analysis"
+    ].format(app_name)
 
     response = requests.get(url, auth=(v.kiuwan.username, v.kiuwan.password))
 
@@ -84,10 +85,12 @@ def _select_analysis(app_name):
 
         print("Select the analysis to analyze:")
         for index, analysis in enumerate(response_dict):
-            print(f"{index + 1}. "
-                  f"{' '.join(analysis['creationDate'][:-1].split('T'))}"
-                  f" : Status {analysis['status']}"
-                  f" : Business Value {analysis['analysisBusinessValue']}")
+            print(
+                f"{index + 1}. "
+                f"{' '.join(analysis['creationDate'][:-1].split('T'))}"
+                f" : Status {analysis['status']}"
+                f" : Business Value {analysis['analysisBusinessValue']}"
+            )
         print("0. Go back to the applications selection")
 
         while True:
@@ -102,14 +105,16 @@ def _select_analysis(app_name):
         if analysis_index == 0:
             return 0
 
-        v.log.success(f"Analysis code selected:"
-                      f" {response_dict[analysis_index - 1]['code']}")
+        v.log.success(
+            f"Analysis code selected:" f" {response_dict[analysis_index - 1]['code']}"
+        )
 
         return response_dict[analysis_index - 1]["code"]
 
     else:
-        v.log.failure("Error retrieving analysis, are there any analysis for "
-                      "this application?")
+        v.log.failure(
+            "Error retrieving analysis, are there any analysis for " "this application?"
+        )
         return 0
 
 
@@ -117,7 +122,8 @@ def _get_vulnerabilities(app_name, analysis_code):
     """It gets the vulnerabilities from the Kiuwan API."""
     v.log.info("Getting vulnerabilities from the Kiuwan API")
     url = v.kiuwan.api_urls_dict["base"] + v.kiuwan.api_urls_dict[
-        "get_defects_CSV_report"].format(app_name, analysis_code)
+        "get_defects_CSV_report"
+    ].format(app_name, analysis_code)
 
     response = requests.get(url, auth=(v.kiuwan.username, v.kiuwan.password))
 
